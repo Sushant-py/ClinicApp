@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">ಕ್ಲಿನಿಕ್ ಆಪ್</string>
+    <string name="welcome_participant">ಸ್ವಾಗತ, ಭಾಗವಹಿಸುವವರೇ</string>
+    <string name="log_morning_dose">ಬೆಳಗಿನ ಡೋಸ್ ಲಾಗ್ ಮಾಡಿ (8 AM)</string>
+    <string name="log_evening_dose">ಸಂಜೆಯ ಡೋಸ್ ಲಾಗ್ ಮಾಡಿ (8 PM)</string>
+    <string name="report_adr">ಅಡ್ಡ ಪರಿಣಾಮವನ್ನು ವರದಿ ಮಾಡಿ</string>
+    <string name="daily_diary">ದೈನಂದಿನ ರೋಗಲಕ್ಷಣ ಮತ್ತು ಔಷಧಿ ಡೈರಿ</string>
+</resources>

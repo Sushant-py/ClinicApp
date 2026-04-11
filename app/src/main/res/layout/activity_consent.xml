@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Informed Consent"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="16dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="By clicking 'I Agree', you consent to participate in the Pratimarsha Nasya Clinical Trial. You agree to log your doses twice daily and report any adverse events immediately using this application. Your data will be stored securely for trial monitoring purposes."
+            android:textSize="16sp"
+            android:layout_marginBottom="24dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nasya Oil Accountability"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp"/>
+
+        <EditText
+            android:id="@+id/etBatchNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter Oil Batch/Lot Number"
+            android:inputType="textCapCharacters"
+            android:layout_marginBottom="8dp"/>
+
+        <EditText
+            android:id="@+id/etExpiryDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter Expiry Date (MM/YYYY)"
+            android:inputType="date"
+            android:layout_marginBottom="24dp"/>
+
+        <Button
+            android:id="@+id/btnConsentAgree"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="I Agree &amp; Submit"
+            android:backgroundTint="#4CAF50"/>
+    </LinearLayout>
+</ScrollView>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/backgroundColor">
+
+    <!-- Header with Back Button -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/primaryColor"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:gravity="center_vertical">
+
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@android:drawable/ic_menu_revert"
+            app:tint="@color/surfaceColor" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Register New Patient"
+            android:textColor="@color/surfaceColor"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginStart="8dp"/>
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/etNewPatientId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Trial ID (e.g. PT-003)"
+                android:inputType="textCapCharacters"
+                android:layout_marginBottom="8dp"/>
+
+            <EditText
+                android:id="@+id/etNewPatientName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Full Name"
+                android:inputType="textPersonName"
+                android:layout_marginBottom="8dp"/>
+
+            <EditText
+                android:id="@+id/etNewPatientAge"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Age"
+                android:inputType="number"
+                android:layout_marginBottom="8dp"/>
+
+            <Spinner
+                android:id="@+id/spinNewPatientSex"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"/>
+
+            <EditText
+                android:id="@+id/etNewPatientPhone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Phone Number"
+                android:inputType="phone"
+                android:layout_marginBottom="8dp"/>
+
+            <EditText
+                android:id="@+id/etNewPatientPin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Set 4-Digit PIN"
+                android:inputType="numberPassword"
+                android:maxLength="4"
+                android:layout_marginBottom="16dp"/>
+
+            <Button
+                android:id="@+id/btnSavePatient"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Save to Database"
+                android:backgroundTint="#4CAF50"/>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

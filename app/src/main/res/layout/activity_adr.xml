@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/backgroundColor">
+
+    <!-- Header with Back Button -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/primaryColor"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:gravity="center_vertical">
+
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@android:drawable/ic_menu_revert"
+            app:tint="@color/surfaceColor" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Report Adverse Reaction"
+            android:textColor="@color/surfaceColor"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginStart="8dp"/>
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btnEmergencyCall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="🚨 CALL EMERGENCY CONTACT"
+                android:backgroundTint="#F44336"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:layout_marginBottom="16dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Severity Level"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/spinSeverity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Associated Signs (Check all that apply)"
+                android:textStyle="bold" />
+            <CheckBox
+                android:id="@+id/cbBleeding"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Active Bleeding (Epistaxis)"
+                android:buttonTint="#F44336"/>
+            <CheckBox
+                android:id="@+id/cbBreathlessness"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Difficulty Breathing"
+                android:buttonTint="#F44336"/>
+            <CheckBox
+                android:id="@+id/cbSeverePain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Severe Nasal Pain"
+                android:layout_marginBottom="16dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Description of Problem"
+                android:textStyle="bold" />
+            <EditText
+                android:id="@+id/etDescription"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:gravity="top"
+                android:hint="Please describe what you are feeling..."
+                android:inputType="textMultiLine"
+                android:layout_marginBottom="16dp"/>
+
+            <TextView
+                android:id="@+id/tvIntensityValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Discomfort Level: 0"
+                android:textStyle="bold" />
+            <SeekBar
+                android:id="@+id/sbIntensity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:max="10"
+                android:layout_marginBottom="24dp"/>
+
+            <Button
+                android:id="@+id/btnSubmitAdr"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Submit Report"
+                android:textSize="18sp"
+                android:backgroundTint="#4CAF50"/>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

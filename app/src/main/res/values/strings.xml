@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">ClinicApp</string>
+    <string name="welcome_participant">Welcome, Participant</string>
+    <string name="log_morning_dose">Log Morning Dose (8 AM)</string>
+    <string name="log_evening_dose">Log Evening Dose (8 PM)</string>
+    <string name="report_adr">Report Adverse Reaction</string>
+    <string name="daily_diary">Daily Symptom &amp; Meds Diary</string>
+</resources>

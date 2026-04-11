@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/backgroundColor">
+
+    <!-- Blue Header to match Patient Page -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/primaryColor"
+        android:orientation="horizontal"
+        android:padding="20dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Investigator Dashboard"
+            android:textColor="@color/surfaceColor"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:paddingStart="8dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnLogout"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Logout"
+            android:textColor="@color/surfaceColor"
+            app:backgroundTint="#33FFFFFF"
+            app:cornerRadius="8dp"
+            android:textSize="12sp"
+            android:paddingHorizontal="16dp"
+            android:minWidth="0dp"
+            android:minHeight="0dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <Button
+            android:id="@+id/btnAddPatient"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="+ Register New Patient"
+            android:backgroundTint="#4CAF50"
+            android:layout_marginBottom="16dp"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#CCCCCC"
+            android:layout_marginBottom="16dp"/>
+
+        <EditText
+            android:id="@+id/etSearchPatientId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter Patient Trial ID (e.g., PT-001)"
+            android:inputType="textCapCharacters"/>
+
+        <Button
+            android:id="@+id/btnSearchPatient"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Pull Patient Record"
+            android:layout_marginBottom="8dp"/>
+
+        <TextView
+            android:id="@+id/tvAdherenceRate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Aggregate Adherence: --%"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#2196F3"
+            android:layout_marginBottom="8dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Filter ADRs By Time:"
+            android:textStyle="bold"/>
+
+        <RadioGroup
+            android:id="@+id/rgTimeFilter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp">
+            <RadioButton
+                android:id="@+id/rb24Hours"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="24h" />
+            <RadioButton
+                android:id="@+id/rb72Hours"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="72h" />
+            <RadioButton
+                android:id="@+id/rbAllTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="All Time"
+                android:checked="true"/>
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/tvActionQueueHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Pending Action Queue"
+            android:textColor="#F44336"
+            android:textStyle="bold"
+            android:layout_marginTop="8dp"/>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="8dp"
+            android:background="#F5F5F5"
+            android:padding="8dp">
+            <TextView
+                android:id="@+id/tvMonitorResults"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="No data loaded."
+                android:textColor="#000000"/>
+        </ScrollView>
+
+        <Button
+            android:id="@+id/btnMarkReviewed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Mark Pending ADRs as Reviewed"
+            android:backgroundTint="#FF9800"
+            android:layout_marginTop="8dp"/>
+        <Button
+            android:id="@+id/btnRunAudit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Run Data Quality Audit"
+            android:backgroundTint="#607D8B"
+            android:layout_marginTop="8dp"/>
+    </LinearLayout>
+</LinearLayout>

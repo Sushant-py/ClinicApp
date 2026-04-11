@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/backgroundColor">
+
+    <LinearLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/primaryColor"
+        android:orientation="horizontal"
+        android:padding="24dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/tvWelcome"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Welcome"
+            android:textColor="@color/surfaceColor"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:paddingStart="4dp"
+            android:layout_marginTop="4dp"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnLogout"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Logout"
+            android:textColor="@color/surfaceColor"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:backgroundTint="#40FFFFFF"
+            app:cornerRadius="8dp"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="6dp"
+            android:layout_marginTop="4dp"/>
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/topBar"
+        android:clipToPadding="false"
+        android:padding="20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Today's Tasks"
+                android:textColor="@color/textSecondary"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="12dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnMorning"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:text="Log Morning Dose (8 AM)"
+                android:textSize="16sp"
+                app:backgroundTint="@color/colorSuccess"
+                app:cornerRadius="12dp"
+                android:layout_marginBottom="12dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnEvening"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:text="Log Evening Dose (8 PM)"
+                android:textSize="16sp"
+                app:backgroundTint="@color/primaryColor"
+                app:cornerRadius="12dp"
+                android:layout_marginBottom="24dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Health &amp; Reporting"
+                android:textColor="@color/textSecondary"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="12dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnDailyDiary"
+                android:layout_width="match_parent"
+                android:layout_height="65dp"
+                android:text="Daily Symptom &amp; Meds Diary"
+                android:textSize="16sp"
+                app:backgroundTint="@color/colorPurple"
+                app:cornerRadius="12dp"
+                android:layout_marginBottom="12dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnReportProblem"
+                android:layout_width="match_parent"
+                android:layout_height="65dp"
+                android:text="Report Adverse Reaction"
+                android:textSize="16sp"
+                app:backgroundTint="@color/colorError"
+                app:cornerRadius="12dp"
+                android:layout_marginBottom="24dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Resources"
+                android:textColor="@color/textSecondary"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="12dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnViewTutorial"
+                android:layout_width="match_parent"
+                android:layout_height="65dp"
+                android:text="Watch Procedure Video"
+                android:textSize="16sp"
+                app:backgroundTint="@color/colorWarning"
+                app:cornerRadius="12dp"
+                android:layout_marginBottom="20dp" />
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

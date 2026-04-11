@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="24dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nasya Trial System"
+            android:textAlignment="center"
+            android:textColor="@color/primaryColor"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Secure Clinical Data Portal"
+            android:textAlignment="center"
+            android:textColor="@color/textSecondary"
+            android:textSize="16sp"
+            android:layout_marginBottom="32dp" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="8dp"
+            app:cardBackgroundColor="@color/surfaceColor">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="24dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Trial ID"
+                    android:textColor="@color/textPrimary"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="4dp" />
+
+                <EditText
+                    android:id="@+id/etTrialId"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="#F9FAFB"
+                    android:hint="e.g., PT-001"
+                    android:inputType="textCapCharacters"
+                    android:paddingHorizontal="16dp"
+                    android:layout_marginBottom="16dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="PIN Code"
+                    android:textColor="@color/textPrimary"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="4dp" />
+
+                <EditText
+                    android:id="@+id/etPin"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="#F9FAFB"
+                    android:hint="4-Digit PIN"
+                    android:inputType="numberPassword"
+                    android:maxLength="4"
+                    android:paddingHorizontal="16dp"
+                    android:layout_marginBottom="16dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Role"
+                    android:textColor="@color/textPrimary"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="4dp" />
+
+                <Spinner
+                    android:id="@+id/spinRole"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="#F9FAFB"
+                    android:layout_marginBottom="24dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnLogin"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:text="Secure Login"
+                    android:textSize="18sp"
+                    app:cornerRadius="12dp" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+</RelativeLayout>

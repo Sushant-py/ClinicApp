@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/backgroundColor"
+    android:orientation="vertical">
+
+    <!-- Header with Back Button -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPurple"
+        android:padding="16dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@android:drawable/ic_menu_revert"
+            app:tint="@color/surfaceColor" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginStart="8dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Daily Diary"
+                android:textColor="@color/surfaceColor"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Log your symptoms and medications"
+                android:textColor="#E0E7FF"
+                android:textSize="12sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                android:layout_marginBottom="20dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Nasal Discomfort (VAS)"
+                        android:textColor="@color/textPrimary"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:layout_marginBottom="4dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0 = None, 10 = Worst Possible"
+                        android:textColor="@color/textSecondary"
+                        android:textSize="14sp"
+                        android:layout_marginBottom="20dp"/>
+
+                    <SeekBar
+                        android:id="@+id/sbNasalDiscomfort"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:max="10"
+                        android:progress="0"
+                        android:progressTint="@color/colorPurple"
+                        android:thumbTint="@color/colorPurple"
+                        android:layout_marginBottom="16dp"/>
+
+                    <TextView
+                        android:id="@+id/tvDiscomfortScore"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Score: 0 / 10"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorPurple"
+                        android:textSize="22sp"
+                        android:textAlignment="center"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                android:layout_marginBottom="30dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Concurrent Medications"
+                        android:textColor="@color/textPrimary"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:layout_marginBottom="12dp"/>
+
+                    <EditText
+                        android:id="@+id/etConcurrentMeds"
+                        android:layout_width="match_parent"
+                        android:layout_height="120dp"
+                        android:hint="List any other medicines taken today..."
+                        android:gravity="top|start"
+                        android:background="#F3F4F6"
+                        android:padding="16dp"
+                        android:textColor="@color/textPrimary"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSaveDiary"
+                android:layout_width="match_parent"
+                android:layout_height="65dp"
+                android:text="Save Diary Entry"
+                android:textSize="18sp"
+                app:cornerRadius="12dp"
+                app:backgroundTint="@color/primaryColor" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
