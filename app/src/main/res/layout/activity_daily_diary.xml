@@ -31,14 +31,14 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Daily Diary"
+                android:text="@string/daily_diary"
                 android:textColor="@color/surfaceColor"
                 android:textSize="20sp"
                 android:textStyle="bold" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Log your symptoms and medications"
+                android:text="@string/health_reporting"
                 android:textColor="#E0E7FF"
                 android:textSize="12sp" />
         </LinearLayout>
@@ -70,7 +70,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Nasal Discomfort (VAS)"
+                        android:text="@string/nasal_discomfort"
                         android:textColor="@color/textPrimary"
                         android:textStyle="bold"
                         android:textSize="18sp"
@@ -79,7 +79,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="0 = None, 10 = Worst Possible"
+                        android:text="@string/vas_hint"
                         android:textColor="@color/textSecondary"
                         android:textSize="14sp"
                         android:layout_marginBottom="20dp"/>
@@ -98,7 +98,7 @@
                         android:id="@+id/tvDiscomfortScore"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Score: 0 / 10"
+                        android:text="@string/score"
                         android:textStyle="bold"
                         android:textColor="@color/colorPurple"
                         android:textSize="22sp"
@@ -122,7 +122,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Concurrent Medications"
+                        android:text="@string/concurrent_meds"
                         android:textColor="@color/textPrimary"
                         android:textStyle="bold"
                         android:textSize="18sp"
@@ -132,7 +132,7 @@
                         android:id="@+id/etConcurrentMeds"
                         android:layout_width="match_parent"
                         android:layout_height="120dp"
-                        android:hint="List any other medicines taken today..."
+                        android:hint="@string/meds_hint"
                         android:gravity="top|start"
                         android:background="#F3F4F6"
                         android:padding="16dp"
@@ -144,7 +144,7 @@
                 android:id="@+id/btnSaveDiary"
                 android:layout_width="match_parent"
                 android:layout_height="65dp"
-                android:text="Save Diary Entry"
+                android:text="@string/save_diary"
                 android:textSize="18sp"
                 app:cornerRadius="12dp"
                 app:backgroundTint="@color/primaryColor" />

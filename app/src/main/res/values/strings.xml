@@ -1,8 +1,60 @@
 <resources>
     <string name="app_name">ClinicApp</string>
-    <string name="welcome_participant">Welcome, Participant</string>
+    <string name="welcome">Welcome</string>
+    <string name="logout">Logout</string>
+    <string name="todays_tasks">Today\'s Tasks</string>
     <string name="log_morning_dose">Log Morning Dose (8 AM)</string>
     <string name="log_evening_dose">Log Evening Dose (8 PM)</string>
+    <string name="health_reporting">Health &amp; Reporting</string>
     <string name="report_adr">Report Adverse Reaction</string>
     <string name="daily_diary">Daily Symptom &amp; Meds Diary</string>
+    <string name="resources">Resources</string>
+    <string name="watch_tutorial">Watch Procedure Video</string>
+    
+    <!-- Daily Diary -->
+    <string name="nasal_discomfort">Nasal Discomfort (VAS)</string>
+    <string name="vas_hint">0 = None, 10 = Worst Possible</string>
+    <string name="score">Score</string>
+    <string name="concurrent_meds">Concurrent Medications</string>
+    <string name="meds_hint">List any other medicines taken today...</string>
+    <string name="save_diary">Save Diary Entry</string>
+
+    <!-- Eligibility -->
+    <string name="eligibility_title">Eligibility Pre-Screening</string>
+    <string name="eligibility_subtitle">Answer these questions for your safety.</string>
+    <string name="q_nosebleed">1. Do you have any active nosebleeds?</string>
+    <string name="q_surgery">2. Have you had nasal surgery in the last 6 months?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="verify_continue">Verify &amp; Continue</string>
+
+    <!-- Consent -->
+    <string name="consent_title">Informed Consent</string>
+    <string name="consent_body">By clicking \'I Agree\', you consent to participate in the Pratimarsha Nasya Clinical Trial. You agree to log your doses twice daily and report any adverse events immediately using this application. Your data will be stored securely for trial monitoring purposes.</string>
+    <string name="oil_accountability">Nasya Oil Accountability</string>
+    <string name="batch_hint">Enter Oil Batch/Lot Number</string>
+    <string name="expiry_hint">Enter Expiry Date (MM/YYYY)</string>
+    <string name="agree_submit">I Agree &amp; Submit</string>
+
+    <!-- Onboarding / Tutorial Steps -->
+    <string name="onboarding_welcome">Welcome to the Trial</string>
+    <string name="step_1_title">Step 1: Application</string>
+    <string name="step_1_desc">Apply exactly 2 drops of Nasya oil into each nostril every morning (8 AM) and evening (8 PM).</string>
+    <string name="step_2_title">Step 2: Confirmation</string>
+    <string name="step_2_desc">After applying, open this app and tap the \'Morning\' or \'Evening\' button to confirm your dose.</string>
+    <string name="step_3_title">Step 3: Safety &amp; Reporting</string>
+    <string name="step_3_desc">If you experience bleeding, severe pain, or trouble breathing, use the \'Report Problem\' button immediately.</string>
+    <string name="next_step">Next Step</string>
+    <string name="start_trial">Start Trial Dashboard</string>
+
+    <!-- Login Screen -->
+    <string name="language_label">Language: </string>
+    <string name="nasya_trial_system">Nasya Trial System</string>
+    <string name="secure_clinical_data_portal">Secure Clinical Data Portal</string>
+    <string name="trial_id">Trial ID</string>
+    <string name="trial_id_hint">e.g., PT-001</string>
+    <string name="pin_code">PIN Code</string>
+    <string name="pin_hint">4-Digit PIN</string>
+    <string name="role">Role</string>
+    <string name="secure_login">Secure Login</string>
 </resources>

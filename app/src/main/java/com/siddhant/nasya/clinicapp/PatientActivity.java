@@ -39,18 +39,17 @@ public class PatientActivity extends AppCompatActivity implements TextToSpeech.O
     SharedPreferences prefs;
     String todayDate;
 
-    // Security flag
     private boolean isNavigatingToInternalActivity = false;
-
-    // TextToSpeech Engine
     TextToSpeech tts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // LOAD LOCALE FIRST
+        LanguageHelper.loadLocale(this);
+        
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patient);
 
-        // Initialize TTS
         tts = new TextToSpeech(this, this);
 
         tvWelcome = findViewById(R.id.tvWelcome);
@@ -65,7 +64,9 @@ public class PatientActivity extends AppCompatActivity implements TextToSpeech.O
         trialId = prefs.getString("USER_NAME", "Participant");
         String realName = prefs.getString("FULL_NAME", "Participant");
 
-        tvWelcome.setText("Welcome, " + realName);
+        // Translate the Welcome string
+        String welcomeBase = getString(R.string.welcome);
+        tvWelcome.setText(welcomeBase + ", " + realName);
 
         requestAppPermissions();
 
@@ -80,11 +81,8 @@ public class PatientActivity extends AppCompatActivity implements TextToSpeech.O
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel("TRIAL_CHANNEL", "Trial Alerts", NotificationManager.IMPORTANCE_HIGH);
-            channel.setDescription("Reminders for Nasya Doses");
             NotificationManager manager = getSystemService(NotificationManager.class);
-            if (manager != null) {
-                manager.createNotificationChannel(channel);
-            }
+            if (manager != null) manager.createNotificationChannel(channel);
         }
 
         checkConsecutiveMissedDoses();

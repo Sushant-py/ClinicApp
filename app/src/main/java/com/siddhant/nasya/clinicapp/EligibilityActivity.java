@@ -6,43 +6,44 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 public class EligibilityActivity extends AppCompatActivity {
 
-    RadioButton rbNosebleedYes, rbSurgeryYes;
-    Button btnCheck;
+    RadioGroup rgNosebleed, rgSurgery;
+    Button btnVerify;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Load Locale First
+        LanguageHelper.loadLocale(this);
+        
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_eligibility);
 
-        rbNosebleedYes = findViewById(R.id.rbNosebleedYes);
-        rbSurgeryYes = findViewById(R.id.rbSurgeryYes);
-        btnCheck = findViewById(R.id.btnCheckEligibility);
+        rgNosebleed = findViewById(R.id.rgNosebleed);
+        rgSurgery = findViewById(R.id.rgSurgery);
+        btnVerify = findViewById(R.id.btnCheckEligibility);
 
-        btnCheck.setOnClickListener(v -> {
-            SharedPreferences prefs = getSharedPreferences("TrialPrefs", Context.MODE_PRIVATE);
-            
-            // Clinical Triage Logic: Check for contraindications
-            if (rbNosebleedYes.isChecked() || rbSurgeryYes.isChecked()) {
-                // Hard-stop: User is ineligible
-                Intent intent = new Intent(this, IneligibleActivity.class);
-                startActivity(intent);
-                finish();
+        btnVerify.setOnClickListener(v -> {
+            boolean hasNosebleed = ((RadioButton) findViewById(rgNosebleed.getCheckedRadioButtonId())).getText().toString().equals(getString(R.string.yes));
+            boolean hasSurgery = ((RadioButton) findViewById(rgSurgery.getCheckedRadioButtonId())).getText().toString().equals(getString(R.string.yes));
+
+            if (hasNosebleed || hasSurgery) {
+                // If ineligible, show ineligible screen
+                startActivity(new Intent(EligibilityActivity.this, IneligibleActivity.class));
             } else {
-                // Eligible: Mark as eligible and proceed to Consent
-                SharedPreferences.Editor editor = prefs.edit();
-                editor.putBoolean("IS_ELIGIBLE", true);
-                editor.apply();
-
-                Intent intent = new Intent(this, ConsentActivity.class);
-                startActivity(intent);
-                finish();
+                // Mark as eligible
+                SharedPreferences prefs = getSharedPreferences("TrialPrefs", Context.MODE_PRIVATE);
+                prefs.edit().putBoolean("IS_ELIGIBLE", true).apply();
+                
+                // Proceed to Consent
+                startActivity(new Intent(EligibilityActivity.this, ConsentActivity.class));
             }
+            finish();
         });
     }
 }

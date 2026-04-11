@@ -19,6 +19,9 @@ public class DailyDiaryActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // LOAD LOCALE FIRST
+        LanguageHelper.loadLocale(this);
+        
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_daily_diary);
 
@@ -33,7 +36,9 @@ public class DailyDiaryActivity extends AppCompatActivity {
         sbDiscomfort.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                tvScore.setText("Score: " + progress + " / 10");
+                // Use translated Score string
+                String scoreBase = getString(R.string.score);
+                tvScore.setText(scoreBase + ": " + progress + " / 10");
             }
             @Override public void onStartTrackingTouch(SeekBar seekBar) {}
             @Override public void onStopTrackingTouch(SeekBar seekBar) {}

@@ -1,8 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">ಕ್ಲಿನಿಕ್ ಆಪ್</string>
-    <string name="welcome_participant">ಸ್ವಾಗತ, ಭಾಗವಹಿಸುವವರೇ</string>
+    <string name="welcome">ಸ್ವಾಗತ</string>
+    <string name="logout">ಲಾಗ್ ಔಟ್</string>
+    <string name="todays_tasks">ಇಂದಿನ ಕಾರ್ಯಗಳು</string>
     <string name="log_morning_dose">ಬೆಳಗಿನ ಡೋಸ್ ಲಾಗ್ ಮಾಡಿ (8 AM)</string>
     <string name="log_evening_dose">ಸಂಜೆಯ ಡೋಸ್ ಲಾಗ್ ಮಾಡಿ (8 PM)</string>
+    <string name="health_reporting">ಆರೋಗ್ಯ ಮತ್ತು ವರದಿ</string>
     <string name="report_adr">ಅಡ್ಡ ಪರಿಣಾಮವನ್ನು ವರದಿ ಮಾಡಿ</string>
     <string name="daily_diary">ದೈನಂದಿನ ರೋಗಲಕ್ಷಣ ಮತ್ತು ಔಷಧಿ ಡೈರಿ</string>
+    <string name="resources">ಸಂಪನ್ಮೂಲಗಳು</string>
+    <string name="watch_tutorial">ಕಾರ್ಯವಿಧಾನದ ವೀಡಿಯೊವನ್ನು ವೀಕ್ಷಿಸಿ</string>
+    
+    <!-- Daily Diary -->
+    <string name="nasal_discomfort">ಮೂಗಿನ ಅಸ್ವಸ್ಥತೆ (VAS)</string>
+    <string name="vas_hint">0 = ಯಾವುದೂ ಇಲ್ಲ, 10 = ಅತ್ಯಂತ ಕೆಟ್ಟದು</string>
+    <string name="score">ಅಂಕ (Score)</string>
+    <string name="concurrent_meds">ಸಹವರ್ತಿ ಔಷಧಿಗಳು (Concurrent Medications)</string>
+    <string name="meds_hint">ಇಂದು ತೆಗೆದುಕೊಂಡ ಇತರ ಔಷಧಿಗಳನ್ನು ಪಟ್ಟಿ ಮಾಡಿ...</string>
+    <string name="save_diary">ಡೈರಿ ನಮೂದನ್ನು ಉಳಿಸಿ</string>
+
+    <!-- Eligibility -->
+    <string name="eligibility_title">ಅರ್ಹತೆಯ ಪೂರ್ವ-ತಪಾಸಣೆ</string>
+    <string name="eligibility_subtitle">ನಿಮ್ಮ ಸುರಕ್ಷತೆಗಾಗಿ ಈ ಪ್ರಶ್ನೆಗಳಿಗೆ ಉತ್ತರಿಸಿ.</string>
+    <string name="q_nosebleed">1. ನಿಮಗೆ ಯಾವುದೇ ಸಕ್ರಿಯ ಮೂಗಿನ ರಕ್ತಸ್ರಾವವಿದೆಯೇ?</string>
+    <string name="q_surgery">2. ಕಳೆದ 6 ತಿಂಗಳಲ್ಲಿ ನೀವು ಮೂಗಿನ ಶಸ್ತ್ರಚಿಕಿತ್ಸೆಯನ್ನು ಮಾಡಿಸಿಕೊಂಡಿದ್ದೀರಾ?</string>
+    <string name="yes">ಹೌದು</string>
+    <string name="no">ಇಲ್ಲ</string>
+    <string name="verify_continue">ಪರಿಶೀಲಿಸಿ ಮತ್ತು ಮುಂದುವರಿಸಿ</string>
+
+    <!-- Consent -->
+    <string name="consent_title">ತಿಳುವಳಿಕೆಯುಳ್ಳ ಒಪ್ಪಿಗೆ</string>
+    <string name="consent_body">\'ನಾನು ಒಪ್ಪುತ್ತೇನೆ\' ಕ್ಲಿಕ್ ಮಾಡುವ ಮೂಲಕ, ನೀವು ಪ್ರತಿಮಾರ್ಷ ನಸ್ಯ ಕ್ಲಿನಿಕಲ್ ಟ್ರಯಲ್‌ನಲ್ಲಿ ಭಾಗವಹಿಸಲು ಒಪ್ಪುತ್ತೀರಿ. ನೀವು ದಿನಕ್ಕೆ ಎರಡು ಬಾರಿ ನಿಮ್ಮ ಡೋಸ್‌ಗಳನ್ನು ಲಾಗ್ ಮಾಡಲು ಮತ್ತು ಈ ಅಪ್ಲಿಕೇಶನ್ ಬಳಸಿ ಯಾವುದೇ ಅಡ್ಡ ಪರಿಣಾಮಗಳನ್ನು ತಕ್ಷಣವೇ ವರದಿ ಮಾಡಲು ಒಪ್ಪುತ್ತೀರಿ. ನಿಮ್ಮ ಡೇಟಾವನ್ನು ಟ್ರಯಲ್ ಮೇಲ್ವಿಚಾರಣೆಯ ಉದ್ದೇಶಗಳಿಗಾಗಿ ಸುರಕ್ಷಿತವಾಗಿ ಸಂಗ್ರಹಿಸಲಾಗುತ್ತದೆ.</string>
+    <string name="oil_accountability">ನಸ್ಯ ಎಣ್ಣೆಯ ಹೊಣೆಗಾರಿಕೆ</string>
+    <string name="batch_hint">ಎಣ್ಣೆಯ ಬ್ಯಾಚ್/ಲಾಟ್ ಸಂಖ್ಯೆಯನ್ನು ನಮೂದಿಸಿ</string>
+    <string name="expiry_hint">ಮುಕ್ತಾಯ ದಿನಾಂಕವನ್ನು ನಮೂದಿಸಿ (MM/YYYY)</string>
+    <string name="agree_submit">ನಾನು ಒಪ್ಪುತ್ತೇನೆ ಮತ್ತು ಸಲ್ಲಿಸುತ್ತೇನೆ</string>
+
+    <!-- Onboarding / Tutorial Steps -->
+    <string name="onboarding_welcome">ಟ್ರಯಲ್‌ಗೆ ಸುಸ್ವಾಗತ</string>
+    <string name="step_1_title">ಹಂತ 1: ಅನ್ವಯಿಸುವುದು</string>
+    <string name="step_1_desc">ಪ್ರತಿದಿನ ಬೆಳಿಗ್ಗೆ (8 AM) ಮತ್ತು ಸಂಜೆ (8 PM) ಪ್ರತಿ ಮೂಗಿನ ಹೊಳ್ಳೆಗೆ ಸರಿಯಾಗಿ 2 ಹನಿ ನಸ್ಯ ಎಣ್ಣೆಯನ್ನು ಅನ್ವಯಿಸಿ.</string>
+    <string name="step_2_title">ಹಂತ 2: ದೃಢೀಕರಣ</string>
+    <string name="step_2_desc">ಅನ್ವಯಿಸಿದ ನಂತರ, ಈ ಅಪ್ಲಿಕೇಶನ್ ತೆರೆಯಿರಿ ಮತ್ತು ನಿಮ್ಮ ಡೋಸ್ ಅನ್ನು ದೃಢೀಕರಿಸಲು \'ಬೆಳಿಗ್ಗೆ\' ಅಥವಾ \'ಸಂಜೆ\' ಬಟನ್ ಒತ್ತಿರಿ.</string>
+    <string name="step_3_title">ಹಂತ 3: ಸುರಕ್ಷತೆ ಮತ್ತು ವರದಿ</string>
+    <string name="step_3_desc">ನೀವು ರಕ್ತಸ್ರಾವ, ತೀವ್ರ ನೋವು ಅಥವಾ ಉಸಿರಾಟದ ತೊಂದರೆಯನ್ನು ಅನುಭವಿಸಿದರೆ, ತಕ್ಷಣವೇ \'ಅಡ್ಡ ಪರಿಣಾಮ ವರದಿ ಮಾಡಿ\' ಬಟನ್ ಬಳಸಿ.</string>
+    <string name="next_step">ಮುಂದಿನ ಹಂತ</string>
+    <string name="start_trial">ಟ್ರಯಲ್ ಡ್ಯಾಶ್‌ಬೋರ್ಡ್ ಪ್ರಾರಂಭಿಸಿ</string>
+
+    <!-- Login Screen -->
+    <string name="language_label">ಭಾಷೆ (Language): </string>
+    <string name="nasya_trial_system">ನಸ್ಯ ಟ್ರಯಲ್ ಸಿಸ್ಟಮ್</string>
+    <string name="secure_clinical_data_portal">ಸುರಕ್ಷಿತ ಕ್ಲಿನಿಕಲ್ ಡೇಟಾ ಪೋರ್ಟಲ್</string>
+    <string name="trial_id">ಟ್ರಯಲ್ ಐಡಿ (Trial ID)</string>
+    <string name="trial_id_hint">ಉದಾ: PT-001</string>
+    <string name="pin_code">ಪಿನ್ ಕೋಡ್ (PIN Code)</string>
+    <string name="pin_hint">4-ಅಂಕಿಗಳ ಪಿನ್</string>
+    <string name="role">ಪಾತ್ರ (Role)</string>
+    <string name="secure_login">ಸುರಕ್ಷಿತ ಲಾಗಿನ್</string>
 </resources>

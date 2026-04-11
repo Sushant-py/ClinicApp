@@ -4,27 +4,33 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="24dp"
-    android:gravity="center">
+    android:gravity="center"
+    android:background="@color/backgroundColor">
 
     <TextView
+        android:id="@+id/tvOnboardingTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Welcome to the Trial"
+        android:text="@string/onboarding_welcome"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginBottom="16dp"
+        android:textColor="@color/primaryColor"/>
 
     <TextView
         android:id="@+id/tvStepDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Step 1: Application\n\nApply exactly 2 drops of Nasya oil into each nostril every morning (8 AM) and evening (8 PM)."
+        android:text="Step Description"
         android:textSize="18sp"
-        android:layout_marginBottom="32dp"/>
+        android:layout_marginBottom="32dp"
+        android:textColor="@color/textPrimary"
+        android:textAlignment="center"/>
 
     <Button
         android:id="@+id/btnNextStep"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Next Step"/>
+        android:layout_height="60dp"
+        android:text="@string/next_step"
+        android:backgroundTint="@color/primaryColor"/>
 </LinearLayout>

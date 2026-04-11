@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,12 +24,17 @@ import com.google.firebase.database.ValueEventListener;
 public class MainActivity extends AppCompatActivity {
 
     EditText etTrialId, etPin;
-    Spinner spinRole;
+    Spinner spinRole, spinLanguage;
     Button btnLogin;
     SharedPreferences prefs;
+    
+    private boolean isFirstSelection = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Load the saved locale before setting the layout
+        LanguageHelper.loadLocale(this);
+        
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -36,16 +43,51 @@ public class MainActivity extends AppCompatActivity {
         etTrialId = findViewById(R.id.etTrialId);
         etPin = findViewById(R.id.etPin);
         spinRole = findViewById(R.id.spinRole);
+        spinLanguage = findViewById(R.id.spinLanguage);
         btnLogin = findViewById(R.id.btnLogin);
 
+        // 1. Setup Roles Spinner
         String[] roles = {"Participant", "Monitor"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, roles);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinRole.setAdapter(adapter);
+        ArrayAdapter<String> roleAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, roles);
+        roleAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinRole.setAdapter(roleAdapter);
+
+        // 2. Setup Language Spinner
+        String[] languages = {"English", "ಕನ್ನಡ (Kannada)", "हिन्दी (Hindi)"};
+        ArrayAdapter<String> langAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, languages);
+        langAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinLanguage.setAdapter(langAdapter);
+
+        // Set spinner selection based on current saved language
+        String currentLang = getSharedPreferences("LanguagePref", MODE_PRIVATE).getString("language", "en");
+        if (currentLang.equals("kn")) spinLanguage.setSelection(1);
+        else if (currentLang.equals("hi")) spinLanguage.setSelection(2);
+        else spinLanguage.setSelection(0);
+
+        spinLanguage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (isFirstSelection) {
+                    isFirstSelection = false;
+                    return;
+                }
+                
+                String selectedLang = "en";
+                if (position == 1) selectedLang = "kn";
+                else if (position == 2) selectedLang = "hi";
+
+                if (!currentLang.equals(selectedLang)) {
+                    LanguageHelper.setLocale(MainActivity.this, selectedLang);
+                    recreate(); // Restart activity to apply language
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
 
         btnLogin.setOnClickListener(v -> attemptLogin());
 
-        // AUTO-LOGIN: If they have a saved session, route them immediately. No fingerprints.
+        // AUTO-LOGIN: If they have a saved session, route them immediately.
         String savedId = prefs.getString("USER_NAME", "");
         if (!savedId.isEmpty()) {
             routeUser();
@@ -111,7 +153,6 @@ public class MainActivity extends AppCompatActivity {
         if (role.equals("Monitor")) {
             intent = new Intent(MainActivity.this, MonitorActivity.class);
         } else {
-            // Checks Eligibility and Consent perfectly.
             if (!prefs.getBoolean("IS_ELIGIBLE", false)) {
                 intent = new Intent(MainActivity.this, EligibilityActivity.class);
             } else if (!prefs.getBoolean("HAS_CONSENTED", false)) {

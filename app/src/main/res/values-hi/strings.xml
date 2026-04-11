@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">क्लीनिक ऐप</string>
+    <string name="welcome">स्वागत है</string>
+    <string name="logout">लॉग आउट</string>
+    <string name="todays_tasks">आज के कार्य</string>
+    <string name="log_morning_dose">सुबह की खुराक लॉग करें (8 AM)</string>
+    <string name="log_evening_dose">शाम की खुराक लॉग करें (8 PM)</string>
+    <string name="health_reporting">स्वास्थ्य और रिपोर्टिंग</string>
+    <string name="report_adr">दुष्प्रभाव की रिपोर्ट करें</string>
+    <string name="daily_diary">दैनिक लक्षण और दवा डायरी</string>
+    <string name="resources">संसाधन</string>
+    <string name="watch_tutorial">प्रक्रिया वीडियो देखें</string>
+    
+    <!-- Daily Diary -->
+    <string name="nasal_discomfort">नाक की परेशानी (VAS)</string>
+    <string name="vas_hint">0 = कोई नहीं, 10 = सबसे खराब संभव</string>
+    <string name="score">स्कोर (Score)</string>
+    <string name="concurrent_meds">समवर्ती दवाएं (Concurrent Medications)</string>
+    <string name="meds_hint">आज ली गई किसी भी अन्य दवा की सूची बनाएं...</string>
+    <string name="save_diary">डायरी प्रविष्टि सहेजें</string>
+
+    <!-- Eligibility -->
+    <string name="eligibility_title">पात्रता पूर्व-स्क्रीनिंग</string>
+    <string name="eligibility_subtitle">अपनी सुरक्षा के लिए इन प्रश्नों के उत्तर दें।</string>
+    <string name="q_nosebleed">1. क्या आपको नाक से खून बहने की कोई समस्या है?</string>
+    <string name="q_surgery">2. क्या पिछले 6 महीनों में आपकी नाक की सर्जरी हुई है?</string>
+    <string name="yes">हाँ</string>
+    <string name="no">नहीं</string>
+    <string name="verify_continue">सत्यापित करें और जारी रखें</string>
+
+    <!-- Consent -->
+    <string name="consent_title">सूचित सहमति</string>
+    <string name="consent_body">\'मैं सहमत हूँ\' पर क्लिक करके, आप प्रतिमर्ष नस्य क्लिनिकल ट्रायल में भाग लेने के लिए अपनी सहमति देते हैं। आप दिन में दो बार अपनी खुराक लॉग करने और इस एप्लिकेशन का उपयोग करके किसी भी प्रतिकूल घटना की तुरंत रिपोर्ट करने के लिए सहमत हैं। आपका डेटा ट्रायल निगरानी उद्देश्यों के लिए सुरक्षित रूप से संग्रहीत किया जाएगा।</string>
+    <string name="oil_accountability">नस्य तेल जवाबदेही</string>
+    <string name="batch_hint">तेल बैच/लॉट नंबर दर्ज करें</string>
+    <string name="expiry_hint">समाप्ति तिथि दर्ज करें (MM/YYYY)</string>
+    <string name="agree_submit">मैं सहमत हूँ और सबमिट करें</string>
+
+    <!-- Onboarding / Tutorial Steps -->
+    <string name="onboarding_welcome">ट्रायल में आपका स्वागत है</string>
+    <string name="step_1_title">चरण 1: उपयोग</string>
+    <string name="step_1_desc">हर सुबह (8 AM) और शाम (8 PM) प्रत्येक नथुने में नस्य तेल की बिल्कुल 2 बूंदें डालें।</string>
+    <string name="step_2_title">चरण 2: पुष्टि</string>
+    <string name="step_2_desc">खुराक डालने के बाद, इस ऐप को खोलें और अपनी खुराक की पुष्टि करने के लिए \'सुबह\' या \'शाम\' बटन दबाएं।</string>
+    <string name="step_3_title">चरण 3: सुरक्षा और रिपोर्टिंग</string>
+    <string name="step_3_desc">यदि आप रक्तस्राव, गंभीर दर्द या सांस लेने में कठिनाई का अनुभव करते हैं, तो तुरंत \'समस्या की रिपोर्ट करें\' बटन का उपयोग करें।</string>
+    <string name="next_step">अगला चरण</string>
+    <string name="start_trial">ट्रायल डैशबोर्ड शुरू करें</string>
+
+    <!-- Login Screen -->
+    <string name="language_label">भाषा (Language): </string>
+    <string name="nasya_trial_system">नस्य ट्रायल सिस्टम</string>
+    <string name="secure_clinical_data_portal">सुरक्षित नैदानिक ​​डेटा पोर्टल</string>
+    <string name="trial_id">ट्रायल आईडी (Trial ID)</string>
+    <string name="trial_id_hint">उदा: PT-001</string>
+    <string name="pin_code">पिन कोड (PIN Code)</string>
+    <string name="pin_hint">4-अंकों का पिन</string>
+    <string name="role">भूमिका (Role)</string>
+    <string name="secure_login">सुरक्षित लॉगिन</string>
+</resources>

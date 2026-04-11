@@ -10,16 +10,22 @@ import androidx.appcompat.app.AppCompatActivity;
 public class OnboardingActivity extends AppCompatActivity {
 
     int currentStep = 1;
-    TextView tvStepDescription;
+    TextView tvStepDescription, tvTitle;
     Button btnNextStep;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Load Locale
+        LanguageHelper.loadLocale(this);
+        
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_onboarding);
 
+        tvTitle = findViewById(R.id.tvOnboardingTitle);
         tvStepDescription = findViewById(R.id.tvStepDescription);
         btnNextStep = findViewById(R.id.btnNextStep);
+
+        updateStep();
 
         btnNextStep.setOnClickListener(v -> {
             currentStep++;
@@ -28,11 +34,21 @@ public class OnboardingActivity extends AppCompatActivity {
     }
 
     private void updateStep() {
-        if (currentStep == 2) {
-            tvStepDescription.setText("Step 2: Confirmation\n\nAfter applying, open this app and tap the 'Morning' or 'Evening' button to confirm your dose.");
+        if (currentStep == 1) {
+            String stepTitle = getString(R.string.step_1_title);
+            String stepDesc = getString(R.string.step_1_desc);
+            tvStepDescription.setText(stepTitle + "\n\n" + stepDesc);
+            btnNextStep.setText(getString(R.string.next_step));
+        } else if (currentStep == 2) {
+            String stepTitle = getString(R.string.step_2_title);
+            String stepDesc = getString(R.string.step_2_desc);
+            tvStepDescription.setText(stepTitle + "\n\n" + stepDesc);
+            btnNextStep.setText(getString(R.string.next_step));
         } else if (currentStep == 3) {
-            tvStepDescription.setText("Step 3: Safety & Reporting\n\nIf you experience bleeding, severe pain, or trouble breathing, use the 'Report Problem' button immediately.");
-            btnNextStep.setText("Start Trial Dashboard");
+            String stepTitle = getString(R.string.step_3_title);
+            String stepDesc = getString(R.string.step_3_desc);
+            tvStepDescription.setText(stepTitle + "\n\n" + stepDesc);
+            btnNextStep.setText(getString(R.string.start_trial));
         } else {
             // Finish onboarding and mark as completed
             SharedPreferences prefs = getSharedPreferences("TrialPrefs", MODE_PRIVATE);

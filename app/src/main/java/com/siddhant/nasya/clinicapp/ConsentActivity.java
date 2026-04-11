@@ -13,52 +13,52 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class ConsentActivity extends AppCompatActivity {
 
-    Button btnConsentAgree;
-    EditText etBatchNumber, etExpiryDate;
+    EditText etBatch, etExpiry;
+    Button btnAgree;
     SharedPreferences prefs;
-    String trialId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Load Locale
+        LanguageHelper.loadLocale(this);
+        
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_consent);
 
         prefs = getSharedPreferences("TrialPrefs", Context.MODE_PRIVATE);
-        trialId = prefs.getString("USER_NAME", "");
 
-        btnConsentAgree = findViewById(R.id.btnConsentAgree);
-        etBatchNumber = findViewById(R.id.etBatchNumber);
-        etExpiryDate = findViewById(R.id.etExpiryDate);
+        etBatch = findViewById(R.id.etBatchNumber);
+        etExpiry = findViewById(R.id.etExpiryDate);
+        btnAgree = findViewById(R.id.btnConsentAgree);
 
-        btnConsentAgree.setOnClickListener(v -> submitConsent());
-    }
+        btnAgree.setOnClickListener(v -> {
+            String batch = etBatch.getText().toString().trim();
+            String expiry = etExpiry.getText().toString().trim();
 
-    private void submitConsent() {
-        String batchNum = etBatchNumber.getText().toString().trim();
-        String expiryDate = etExpiryDate.getText().toString().trim();
+            if (batch.isEmpty() || expiry.isEmpty()) {
+                Toast.makeText(this, "Batch and Expiry are required", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-        if (batchNum.isEmpty() || expiryDate.isEmpty()) {
-            Toast.makeText(this, "Please enter the Batch Number and Expiry Date of your Nasya Oil.", Toast.LENGTH_LONG).show();
-            return;
-        }
+            String trialId = prefs.getString("USER_NAME", "Unknown");
+            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(trialId);
 
-        // Save Drug Accountability to Firebase
-        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(trialId);
-        userRef.child("oilBatchNumber").setValue(batchNum);
-        userRef.child("oilExpiryDate").setValue(expiryDate);
-        userRef.child("hasConsented").setValue(true);
+            Map<String, Object> update = new HashMap<>();
+            update.put("hasConsented", true);
+            update.put("oilBatchNumber", batch);
+            update.put("oilExpiryDate", expiry);
 
-        // Update Local Memory so they don't see this screen again
-        prefs.edit().putBoolean("HAS_CONSENTED", true).apply();
-
-        Toast.makeText(this, "Consent Saved.", Toast.LENGTH_SHORT).show();
-
-        // Send them to Onboarding!
-        Intent intent = new Intent(ConsentActivity.this, OnboardingActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        finish();
+            userRef.updateChildren(update).addOnCompleteListener(task -> {
+                prefs.edit().putBoolean("HAS_CONSENTED", true).apply();
+                Intent intent = new Intent(ConsentActivity.this, OnboardingActivity.class);
+                startActivity(intent);
+                finish();
+            });
+        });
     }
 }
