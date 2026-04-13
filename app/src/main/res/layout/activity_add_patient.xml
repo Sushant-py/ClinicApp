@@ -26,7 +26,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Register New Patient"
+            android:text="@string/register_new_patient"
             android:textColor="@color/surfaceColor"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -47,7 +47,7 @@
                 android:id="@+id/etNewPatientId"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Trial ID (e.g. PT-003)"
+                android:hint="@string/trial_id_hint"
                 android:inputType="textCapCharacters"
                 android:layout_marginBottom="8dp"/>
 
@@ -55,7 +55,7 @@
                 android:id="@+id/etNewPatientName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Full Name"
+                android:hint="@string/full_name_hint"
                 android:inputType="textPersonName"
                 android:layout_marginBottom="8dp"/>
 
@@ -63,7 +63,7 @@
                 android:id="@+id/etNewPatientAge"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Age"
+                android:hint="@string/age_hint"
                 android:inputType="number"
                 android:layout_marginBottom="8dp"/>
 
@@ -77,7 +77,7 @@
                 android:id="@+id/etNewPatientPhone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Phone Number"
+                android:hint="@string/phone_hint"
                 android:inputType="phone"
                 android:layout_marginBottom="8dp"/>
 
@@ -85,7 +85,7 @@
                 android:id="@+id/etNewPatientPin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Set 4-Digit PIN"
+                android:hint="@string/set_pin_hint"
                 android:inputType="numberPassword"
                 android:maxLength="4"
                 android:layout_marginBottom="16dp"/>
@@ -94,7 +94,7 @@
                 android:id="@+id/btnSavePatient"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Save to Database"
+                android:text="@string/save_database"
                 android:backgroundTint="#4CAF50"/>
 
         </LinearLayout>

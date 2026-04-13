@@ -48,6 +48,37 @@
     <string name="next_step">अगला चरण</string>
     <string name="start_trial">ट्रायल डैशबोर्ड शुरू करें</string>
 
+    <!-- ADR Reporting -->
+    <string name="emergency_call">🚨 आपातकालीन संपर्क को कॉल करें</string>
+    <string name="severity_level">गंभीरता का स्तर (Severity Level)</string>
+    <string name="associated_signs">संबंधित लक्षण (जो लागू हों उन्हें चुनें)</string>
+    <string name="active_bleeding">सक्रिय रक्तस्राव (Active Bleeding)</string>
+    <string name="difficulty_breathing">सांस लेने में कठिनाई</string>
+    <string name="severe_nasal_pain">नाक में तेज दर्द</string>
+    <string name="description_problem">समस्या का विवरण</string>
+    <string name="desc_hint">कृपया बताएं कि आप क्या महसूस कर रहे हैं...</string>
+    <string name="discomfort_level">परेशानी का स्तर (Discomfort Level)</string>
+    <string name="submit_report">रिपोर्ट सबमिट करें</string>
+    <string name="uploading">अपलोड हो रहा है...</string>
+    <string name="report_success">रिपोर्ट सफलतापूर्वक सबमिट की गई</string>
+    <string name="mild">हल्का (Mild)</string>
+    <string name="moderate">मध्यम (Moderate)</string>
+    <string name="severe">गंभीर (Severe)</string>
+
+    <!-- Dose confirmation -->
+    <string name="confirm_admin">खुराक की पुष्टि करें</string>
+    <string name="applied_drops_prompt">क्या आपने प्रत्येक नथुने में नस्य तेल की बिल्कुल 2 बूंदें सफलतापूर्वक डाली हैं?</string>
+    <string name="i_applied">मैंने डाल ली है</string>
+    <string name="cancel">रद्द करें</string>
+    <string name="morning_logged">सुबह की खुराक - लॉग की गई</string>
+    <string name="evening_logged">शाम की खुराक - लॉग की गई</string>
+    <string name="morning_overdue">सुबह की खुराक - ⚠️ बकाया</string>
+    <string name="evening_overdue">शाम की खुराक - ⚠️ बकाया</string>
+    <string name="logged_suffix">लॉग की गई</string>
+    <string name="overdue_suffix">⚠️ बकाया</string>
+    <string name="morning">सुबह</string>
+    <string name="evening">शाम</string>
+
     <!-- Login Screen -->
     <string name="language_label">भाषा (Language): </string>
     <string name="nasya_trial_system">नस्य ट्रायल सिस्टम</string>
@@ -58,4 +89,46 @@
     <string name="pin_hint">4-अंकों का पिन</string>
     <string name="role">भूमिका (Role)</string>
     <string name="secure_login">सुरक्षित लॉगिन</string>
+
+    <!-- Investigator / Monitor Dashboard -->
+    <string name="investigator_dashboard">जांचकर्ता डैशबोर्ड</string>
+    <string name="register_new_patient">+ नया रोगी पंजीकृत करें</string>
+    <string name="pull_patient_record">रोगी रिकॉर्ड खींचें</string>
+    <string name="aggregate_adherence">कुल अनुपालन</string>
+    <string name="filter_adrs">समय के आधार पर ADR फ़िल्टर करें:</string>
+    <string name="pending_action_queue">लंबित कार्रवाई कतार</string>
+    <string name="mark_reviewed">लंबित ADR को समीक्षा के रूप में चिह्नित करें</string>
+    <string name="run_audit">डेटा गुणवत्ता ऑडिट चलाएँ</string>
+    <string name="patient_id_hint">रोगी ट्रायल आईडी दर्ज करें (उदा: PT-001)</string>
+    
+    <!-- Patient Profile Fetching labels -->
+    <string name="loading_data">डेटा लोड हो रहा है...</string>
+    <string name="patient_profile_header">=== रोगी प्रोफ़ाइल ===</string>
+    <string name="patient_name">नाम</string>
+    <string name="patient_age">आयु</string>
+    <string name="patient_sex">लिंग</string>
+    <string name="trial_arm">ट्रायल आर्म</string>
+    <string name="comorbidities">सहोपचारिता (Comorbidities)</string>
+    <string name="drug_batch">दवा बैच</string>
+    <string name="profile_not_found">उपयोगकर्ता प्रोफ़ाइल नहीं मिली।</string>
+    <string name="total_doses_logged">कुल लॉग की गई खुराक</string>
+    <string name="severe_non_adherence">⚠️ चेतावनी: 0 खुराक लॉग की गई। गंभीर गैर-अनुपालन।</string>
+    <string name="reported_adrs_header">--- रिपोर्ट की गई ADR ---</string>
+    <string name="no_adrs_reported">कोई प्रतिकूल घटना रिपोर्ट नहीं की गई।</string>
+    <string name="action_required">🚨 कार्रवाई आवश्यक</string>
+    <string name="sae_warning">⚠️ गंभीर प्रतिकूल घटना (SAE)</string>
+    <string name="status_label">स्थिति</string>
+    <string name="date_label">तारीख</string>
+    <string name="severity_label_simple">गंभीरता</string>
+    <string name="desc_label">विवरण</string>
+
+    <!-- Add Patient Screen -->
+    <string name="full_name_hint">पूरा नाम</string>
+    <string name="age_hint">आयु</string>
+    <string name="phone_hint">फ़ोन नंबर</string>
+    <string name="set_pin_hint">4-अंकों का पिन सेट करें</string>
+    <string name="save_database">डेटाबेस में सहेजें</string>
+    <string name="registration_success">रोगी सफलतापूर्वक पंजीकृत हुआ</string>
+    <string name="registration_failed">रोगी को पंजीकृत करने में विफल</string>
+    <string name="required_fields_error">आईडी, नाम और पिन आवश्यक हैं</string>
 </resources>

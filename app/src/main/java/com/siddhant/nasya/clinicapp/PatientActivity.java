@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import com.google.firebase.database.DataSnapshot;
@@ -44,8 +45,8 @@ public class PatientActivity extends AppCompatActivity implements TextToSpeech.O
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // LOAD LOCALE FIRST
-        LanguageHelper.loadLocale(this);
+        // LOAD LOCALE FIRST - Removed (this) to fix compilation error
+        LanguageHelper.loadLocale();
         
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patient);
@@ -72,8 +73,12 @@ public class PatientActivity extends AppCompatActivity implements TextToSpeech.O
 
         todayDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
 
-        if (prefs.getBoolean(trialId + "_" + todayDate + "_Morning", false)) lockButton(btnMorning, "Morning");
-        if (prefs.getBoolean(trialId + "_" + todayDate + "_Evening", false)) lockButton(btnEvening, "Evening");
+        if (prefs.getBoolean(trialId + "_" + todayDate + "_Morning", false)) {
+            lockButton(btnMorning, getString(R.string.morning));
+        }
+        if (prefs.getBoolean(trialId + "_" + todayDate + "_Evening", false)) {
+            lockButton(btnEvening, getString(R.string.evening));
+        }
 
         checkDatabaseForToday(todayDate);
         checkIfOverdue();
@@ -117,9 +122,7 @@ public class PatientActivity extends AppCompatActivity implements TextToSpeech.O
     @Override
     protected void onStop() {
         super.onStop();
-        if (!isChangingConfigurations() && !isNavigatingToInternalActivity) {
-            logoutUser();
-        }
+
     }
 
     private void logoutUser() {
@@ -133,7 +136,11 @@ public class PatientActivity extends AppCompatActivity implements TextToSpeech.O
     @Override
     public void onInit(int status) {
         if (status == TextToSpeech.SUCCESS) {
-            tts.setLanguage(Locale.ENGLISH);
+            // Set TTS language based on selected locale
+            String currentLang = AppCompatDelegate.getApplicationLocales().toLanguageTags();
+            if (currentLang.contains("kn")) tts.setLanguage(new Locale("kn", "IN"));
+            else if (currentLang.contains("hi")) tts.setLanguage(new Locale("hi", "IN"));
+            else tts.setLanguage(Locale.ENGLISH);
         }
     }
 
@@ -153,17 +160,17 @@ public class PatientActivity extends AppCompatActivity implements TextToSpeech.O
     }
 
     private void showDoseConfirmationDialog(String doseType, Button clickedButton) {
-        String promptMessage = "Have you successfully applied exactly 2 drops of Nasya oil to each nostril?";
+        String promptMessage = getString(R.string.applied_drops_prompt);
         speakText(promptMessage);
 
         new AlertDialog.Builder(this)
-                .setTitle("Confirm Administration")
+                .setTitle(getString(R.string.confirm_admin))
                 .setMessage(promptMessage)
-                .setPositiveButton("I Applied", (dialog, which) -> {
+                .setPositiveButton(getString(R.string.i_applied), (dialog, which) -> {
                     if (tts != null) tts.stop();
                     logDoseToFirebase(doseType, clickedButton);
                 })
-                .setNegativeButton("Cancel", (dialog, which) -> {
+                .setNegativeButton(getString(R.string.cancel), (dialog, which) -> {
                     if (tts != null) tts.stop();
                     dialog.dismiss();
                 })
@@ -175,9 +182,16 @@ public class PatientActivity extends AppCompatActivity implements TextToSpeech.O
         Calendar now = Calendar.getInstance();
         int currentHour = now.get(Calendar.HOUR_OF_DAY);
         boolean morningLogged = prefs.getBoolean(trialId + "_" + todayDate + "_Morning", false);
+        boolean eveningLogged = prefs.getBoolean(trialId + "_" + todayDate + "_Evening", false);
+
         if (currentHour >= 8 && !morningLogged) {
-            btnMorning.setText("Morning Dose - ⚠️ OVERDUE");
+            btnMorning.setText(getString(R.string.morning) + " " + getString(R.string.overdue_suffix));
             btnMorning.setBackgroundColor(android.graphics.Color.parseColor("#FF9800"));
+        }
+        
+        if (currentHour >= 21 && !eveningLogged) {
+            btnEvening.setText(getString(R.string.evening) + " " + getString(R.string.overdue_suffix));
+            btnEvening.setBackgroundColor(android.graphics.Color.parseColor("#FF9800"));
         }
     }
 
@@ -231,8 +245,11 @@ public class PatientActivity extends AppCompatActivity implements TextToSpeech.O
                         String timestamp = ds.child("timestamp").getValue(String.class);
                         String type = ds.child("doseType").getValue(String.class);
                         if (timestamp != null && timestamp.contains(today)) {
-                            if ("Morning Dose".equals(type)) lockButton(btnMorning, "Morning");
-                            else if ("Evening Dose".equals(type)) lockButton(btnEvening, "Evening");
+                            if ("Morning Dose".equals(type)) {
+                                lockButton(btnMorning, getString(R.string.morning));
+                            } else if ("Evening Dose".equals(type)) {
+                                lockButton(btnEvening, getString(R.string.evening));
+                            }
                         }
                     }
                 }
@@ -246,12 +263,14 @@ public class PatientActivity extends AppCompatActivity implements TextToSpeech.O
         String currentTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
         DoseRecord newDose = new DoseRecord(trialId, currentTime, "Applied", doseType);
         FirebaseDatabase.getInstance().getReference("doses").child(trialId).push().setValue(newDose);
-        lockButton(clickedButton, doseType.contains("Morning") ? "Morning" : "Evening");
+        
+        String typeLabel = doseType.contains("Morning") ? getString(R.string.morning) : getString(R.string.evening);
+        lockButton(clickedButton, typeLabel);
         saveLocalLock(doseType.contains("Morning") ? "Morning" : "Evening", todayDate);
     }
 
-    private void lockButton(Button btn, String type) {
-        btn.setText(type + " Dose - LOGGED");
+    private void lockButton(Button btn, String typeLabel) {
+        btn.setText(typeLabel + " " + getString(R.string.logged_suffix));
         btn.setEnabled(false);
         btn.setBackgroundColor(android.graphics.Color.parseColor("#4CAF50"));
     }

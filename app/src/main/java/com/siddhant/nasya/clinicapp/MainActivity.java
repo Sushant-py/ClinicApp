@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.os.LocaleListCompat;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -32,9 +34,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // Load the saved locale before setting the layout
-        LanguageHelper.loadLocale(this);
-        
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -59,9 +58,9 @@ public class MainActivity extends AppCompatActivity {
         spinLanguage.setAdapter(langAdapter);
 
         // Set spinner selection based on current saved language
-        String currentLang = getSharedPreferences("LanguagePref", MODE_PRIVATE).getString("language", "en");
-        if (currentLang.equals("kn")) spinLanguage.setSelection(1);
-        else if (currentLang.equals("hi")) spinLanguage.setSelection(2);
+        String currentLang = AppCompatDelegate.getApplicationLocales().toLanguageTags();
+        if (currentLang.contains("kn")) spinLanguage.setSelection(1);
+        else if (currentLang.contains("hi")) spinLanguage.setSelection(2);
         else spinLanguage.setSelection(0);
 
         spinLanguage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -76,9 +75,9 @@ public class MainActivity extends AppCompatActivity {
                 if (position == 1) selectedLang = "kn";
                 else if (position == 2) selectedLang = "hi";
 
-                if (!currentLang.equals(selectedLang)) {
+                if (!currentLang.contains(selectedLang)) {
+                    // Pass MainActivity.this to satisfy the new setLocale(Activity, String) signature
                     LanguageHelper.setLocale(MainActivity.this, selectedLang);
-                    recreate(); // Restart activity to apply language
                 }
             }
             @Override
@@ -100,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
         String selectedRole = spinRole.getSelectedItem().toString();
 
         if (trialId.isEmpty() || enteredPin.isEmpty()) {
-            Toast.makeText(this, "Enter ID and PIN", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.enter_id_pin), Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -119,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
 
                     if (dbPin != null && dbPin.equals(enteredPin)) {
                         if (dbRole != null && !dbRole.equals(selectedRole)) {
-                            Toast.makeText(MainActivity.this, "Wrong Role Selected", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, getString(R.string.wrong_role), Toast.LENGTH_SHORT).show();
                             return;
                         }
 
@@ -132,10 +131,10 @@ public class MainActivity extends AppCompatActivity {
 
                         routeUser();
                     } else {
-                        Toast.makeText(MainActivity.this, "Incorrect PIN", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, getString(R.string.incorrect_pin), Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(MainActivity.this, "User Not Found", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, getString(R.string.user_not_found), Toast.LENGTH_SHORT).show();
                 }
             }
 

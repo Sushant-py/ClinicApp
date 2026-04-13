@@ -19,8 +19,8 @@ public class DailyDiaryActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // LOAD LOCALE FIRST
-        LanguageHelper.loadLocale(this);
+        // Updated to match the new LanguageHelper method signature (no arguments)
+        LanguageHelper.loadLocale();
         
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_daily_diary);

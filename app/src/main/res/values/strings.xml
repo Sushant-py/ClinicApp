@@ -47,6 +47,37 @@
     <string name="next_step">Next Step</string>
     <string name="start_trial">Start Trial Dashboard</string>
 
+    <!-- ADR Reporting -->
+    <string name="emergency_call">🚨 CALL EMERGENCY CONTACT</string>
+    <string name="severity_level">Severity Level</string>
+    <string name="associated_signs">Associated Signs (Check all that apply)</string>
+    <string name="active_bleeding">Active Bleeding (Epistaxis)</string>
+    <string name="difficulty_breathing">Difficulty Breathing</string>
+    <string name="severe_nasal_pain">Severe Nasal Pain</string>
+    <string name="description_problem">Description of Problem</string>
+    <string name="desc_hint">Please describe what you are feeling...</string>
+    <string name="discomfort_level">Discomfort Level</string>
+    <string name="submit_report">Submit Report</string>
+    <string name="uploading">Uploading...</string>
+    <string name="report_success">Report Submitted Successfully</string>
+    <string name="mild">Mild</string>
+    <string name="moderate">Moderate</string>
+    <string name="severe">Severe</string>
+
+    <!-- Dose confirmation -->
+    <string name="confirm_admin">Confirm Administration</string>
+    <string name="applied_drops_prompt">Have you successfully applied exactly 2 drops of Nasya oil to each nostril?</string>
+    <string name="i_applied">I Applied</string>
+    <string name="cancel">Cancel</string>
+    <string name="morning_logged">Morning Dose - LOGGED</string>
+    <string name="evening_logged">Evening Dose - LOGGED</string>
+    <string name="morning_overdue">Morning Dose - ⚠️ OVERDUE</string>
+    <string name="evening_overdue">Evening Dose - ⚠️ OVERDUE</string>
+    <string name="logged_suffix">LOGGED</string>
+    <string name="overdue_suffix">⚠️ OVERDUE</string>
+    <string name="morning">Morning</string>
+    <string name="evening">Evening</string>
+
     <!-- Login Screen -->
     <string name="language_label">Language: </string>
     <string name="nasya_trial_system">Nasya Trial System</string>
@@ -57,4 +88,50 @@
     <string name="pin_hint">4-Digit PIN</string>
     <string name="role">Role</string>
     <string name="secure_login">Secure Login</string>
+    <string name="enter_id_pin">Enter ID and PIN</string>
+    <string name="wrong_role">Wrong Role Selected</string>
+    <string name="incorrect_pin">Incorrect PIN</string>
+    <string name="user_not_found">User Not Found</string>
+
+    <!-- Investigator / Monitor Dashboard -->
+    <string name="investigator_dashboard">Investigator Dashboard</string>
+    <string name="register_new_patient">+ Register New Patient</string>
+    <string name="pull_patient_record">Pull Patient Record</string>
+    <string name="aggregate_adherence">Aggregate Adherence</string>
+    <string name="filter_adrs">Filter ADRs By Time:</string>
+    <string name="pending_action_queue">Pending Action Queue</string>
+    <string name="mark_reviewed">Mark Pending ADRs as Reviewed</string>
+    <string name="run_audit">Run Data Quality Audit</string>
+    <string name="patient_id_hint">Enter Patient Trial ID (e.g., PT-001)</string>
+    
+    <!-- Patient Profile Fetching labels -->
+    <string name="loading_data">Loading data...</string>
+    <string name="patient_profile_header">=== PATIENT PROFILE ===</string>
+    <string name="patient_name">Name</string>
+    <string name="patient_age">Age</string>
+    <string name="patient_sex">Sex</string>
+    <string name="trial_arm">Trial Arm</string>
+    <string name="comorbidities">Comorbidities</string>
+    <string name="drug_batch">Drug Batch</string>
+    <string name="profile_not_found">User profile not found.</string>
+    <string name="total_doses_logged">Total Doses Logged</string>
+    <string name="severe_non_adherence">⚠️ ALERT: 0 doses logged. Severe Non-Adherence.</string>
+    <string name="reported_adrs_header">--- REPORTED ADRs ---</string>
+    <string name="no_adrs_reported">No adverse events reported.</string>
+    <string name="action_required">🚨 ACTION REQUIRED</string>
+    <string name="sae_warning">⚠️ SERIOUS ADVERSE EVENT (SAE)</string>
+    <string name="status_label">Status</string>
+    <string name="date_label">Date</string>
+    <string name="severity_label_simple">Severity</string>
+    <string name="desc_label">Desc</string>
+
+    <!-- Add Patient Screen -->
+    <string name="full_name_hint">Full Name</string>
+    <string name="age_hint">Age</string>
+    <string name="phone_hint">Phone Number</string>
+    <string name="set_pin_hint">Set 4-Digit PIN</string>
+    <string name="save_database">Save to Database</string>
+    <string name="registration_success">Patient Registered Successfully</string>
+    <string name="registration_failed">Failed to register patient</string>
+    <string name="required_fields_error">ID, Name, and PIN are required</string>
 </resources>

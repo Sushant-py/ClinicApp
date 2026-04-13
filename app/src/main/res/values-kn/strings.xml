@@ -40,13 +40,44 @@
     <!-- Onboarding / Tutorial Steps -->
     <string name="onboarding_welcome">ಟ್ರಯಲ್‌ಗೆ ಸುಸ್ವಾಗತ</string>
     <string name="step_1_title">ಹಂತ 1: ಅನ್ವಯಿಸುವುದು</string>
-    <string name="step_1_desc">ಪ್ರತಿದಿನ ಬೆಳಿಗ್ಗೆ (8 AM) ಮತ್ತು ಸಂಜೆ (8 PM) ಪ್ರತಿ ಮೂಗಿನ ಹೊಳ್ಳೆಗೆ ಸರಿಯಾಗಿ 2 ಹನಿ ನಸ್ಯ ಎಣ್ಣೆಯನ್ನು ಅನ್ವಯಿಸಿ.</string>
+    <string name="step_1_desc">ಪ್ರತಿದಿನ ಬೆಳಿಗ್ಗೆ (8 AM) and ಸಂಜೆ (8 PM) ಪ್ರತಿ ಮೂಗಿನ ಹೊಳ್ಳೆಗೆ ಸರಿಯಾಗಿ 2 ಹನಿ ನಸ್ಯ ಎಣ್ಣೆಯನ್ನು ಅನ್ವಯಿಸಿ.</string>
     <string name="step_2_title">ಹಂತ 2: ದೃಢೀಕರಣ</string>
     <string name="step_2_desc">ಅನ್ವಯಿಸಿದ ನಂತರ, ಈ ಅಪ್ಲಿಕೇಶನ್ ತೆರೆಯಿರಿ ಮತ್ತು ನಿಮ್ಮ ಡೋಸ್ ಅನ್ನು ದೃಢೀಕರಿಸಲು \'ಬೆಳಿಗ್ಗೆ\' ಅಥವಾ \'ಸಂಜೆ\' ಬಟನ್ ಒತ್ತಿರಿ.</string>
     <string name="step_3_title">ಹಂತ 3: ಸುರಕ್ಷತೆ ಮತ್ತು ವರದಿ</string>
     <string name="step_3_desc">ನೀವು ರಕ್ತಸ್ರಾವ, ತೀವ್ರ ನೋವು ಅಥವಾ ಉಸಿರಾಟದ ತೊಂದರೆಯನ್ನು ಅನುಭವಿಸಿದರೆ, ತಕ್ಷಣವೇ \'ಅಡ್ಡ ಪರಿಣಾಮ ವರದಿ ಮಾಡಿ\' ಬಟನ್ ಬಳಸಿ.</string>
     <string name="next_step">ಮುಂದಿನ ಹಂತ</string>
     <string name="start_trial">ಟ್ರಯಲ್ ಡ್ಯಾಶ್‌ಬೋರ್ಡ್ ಪ್ರಾರಂಭಿಸಿ</string>
+
+    <!-- ADR Reporting -->
+    <string name="emergency_call">🚨 ತುರ್ತು ಸಂಪರ್ಕಕ್ಕೆ ಕರೆ ಮಾಡಿ</string>
+    <string name="severity_level">ತೀವ್ರತೆಯ ಮಟ್ಟ (Severity Level)</string>
+    <string name="associated_signs">ಸಂಬಂಧಿತ ಲಕ್ಷಣಗಳು (ಅನ್ವಯಿಸುವ ಎಲ್ಲವನ್ನೂ ಪರಿಶೀಲಿಸಿ)</string>
+    <string name="active_bleeding">ಸಕ್ರಿಯ ರಕ್ತಸ್ರಾವ (Active Bleeding)</string>
+    <string name="difficulty_breathing">ಉಸಿರಾಟದ ತೊಂದರೆ</string>
+    <string name="severe_nasal_pain">ತೀವ್ರ ಮೂಗಿನ ನೋವು</string>
+    <string name="description_problem">ಸಮಸ್ಯೆಯ ವಿವರಣೆ</string>
+    <string name="desc_hint">ನೀವು ಏನು ಅನುಭವಿಸುತ್ತಿದ್ದೀರಿ ಎಂಬುದನ್ನು ದಯವಿಟ್ಟು ವಿವರಿಸಿ...</string>
+    <string name="discomfort_level">ಅಸ್ವಸ್ಥತೆಯ ಮಟ್ಟ (Discomfort Level)</string>
+    <string name="submit_report">ವರದಿಯನ್ನು ಸಲ್ಲಿಸಿ</string>
+    <string name="uploading">ಅಪ್‌ಲೋಡ್ ಆಗುತ್ತಿದೆ...</string>
+    <string name="report_success">ವರದಿಯನ್ನು ಯಶಸ್ವಿಯಾಗಿ ಸಲ್ಲಿಸಲಾಗಿದೆ</string>
+    <string name="mild">ಸೌಮ್ಯ (Mild)</string>
+    <string name="moderate">ಮಧ್ಯಮ (Moderate)</string>
+    <string name="severe">ತೀವ್ರ (Severe)</string>
+
+    <!-- Dose confirmation -->
+    <string name="confirm_admin">ಡೋಸ್ ದೃಢೀಕರಿಸಿ</string>
+    <string name="applied_drops_prompt">ನೀವು ಪ್ರತಿ ಮೂಗಿನ ಹೊಳ್ಳೆಗೆ ಸರಿಯಾಗಿ 2 ಹನಿ ನಸ್ಯ ಎಣ್ಣೆಯನ್ನು ಅನ್ವಯಿಸಿದ್ದೀರಾ?</string>
+    <string name="i_applied">ನಾನು ಅನ್ವಯಿಸಿದ್ದೇನೆ</string>
+    <string name="cancel">ರದ್ದುಮಾಡಿ</string>
+    <string name="morning_logged">ಬೆಳಗಿನ ಡೋಸ್ - ಲಾಗ್ ಮಾಡಲಾಗಿದೆ</string>
+    <string name="evening_logged">ಸಂಜೆಯ ಡೋಸ್ - ಲಾಗ್ ಮಾಡಲಾಗಿದೆ</string>
+    <string name="morning_overdue">ಬೆಳಗಿನ ಡೋಸ್ - ⚠️ ಬಾಕಿ ಇದೆ</string>
+    <string name="evening_overdue">ಸಂಜೆಯ ಡೋಸ್ - ⚠️ ಬಾಕಿ ಇದೆ</string>
+    <string name="logged_suffix">ಲಾಗ್ ಮಾಡಲಾಗಿದೆ</string>
+    <string name="overdue_suffix">⚠️ ಬಾಕಿ ಇದೆ</string>
+    <string name="morning">ಬೆಳಿಗ್ಗೆ</string>
+    <string name="evening">ಸಂಜೆ</string>
 
     <!-- Login Screen -->
     <string name="language_label">ಭಾಷೆ (Language): </string>
@@ -58,4 +89,46 @@
     <string name="pin_hint">4-ಅಂಕಿಗಳ ಪಿನ್</string>
     <string name="role">ಪಾತ್ರ (Role)</string>
     <string name="secure_login">ಸುರಕ್ಷಿತ ಲಾಗಿನ್</string>
+
+    <!-- Investigator / Monitor Dashboard -->
+    <string name="investigator_dashboard">ತನಿಖಾಧಿಕಾರಿ ಡ್ಯಾಶ್‌ಬೋರ್ಡ್</string>
+    <string name="register_new_patient">+ ಹೊಸ ರೋಗಿಯನ್ನು ನೋಂದಾಯಿಸಿ</string>
+    <string name="pull_patient_record">ರೋಗಿಯ ದಾಖಲೆಯನ್ನು ಎಳೆಯಿರಿ</string>
+    <string name="aggregate_adherence">ಒಟ್ಟು ಅನುಸರಣೆ</string>
+    <string name="filter_adrs">ಸಮಯದ ಮೂಲಕ ADRಗಳನ್ನು ಫಿಲ್ಟರ್ ಮಾಡಿ:</string>
+    <string name="pending_action_queue">ಬಾಕಿ ಉಳಿದಿರುವ ಕ್ರಮಗಳ ಸರತಿ ಸಾಲು</string>
+    <string name="mark_reviewed">ಬಾಕಿ ಇರುವ ADRಗಳನ್ನು ಪರಿಶೀಲಿಸಲಾಗಿದೆ ಎಂದು ಗುರುತಿಸಿ</string>
+    <string name="run_audit">ಡೇಟಾ ಗುಣಮಟ್ಟದ ಆಡಿಟ್ ನಡೆಸಿ</string>
+    <string name="patient_id_hint">ರೋಗಿಯ ಟ್ರಯಲ್ ಐಡಿ ನಮೂದಿಸಿ (ಉದಾ: PT-001)</string>
+    
+    <!-- Patient Profile Fetching labels -->
+    <string name="loading_data">ಡೇಟಾವನ್ನು ಲೋಡ್ ಮಾಡಲಾಗುತ್ತಿದೆ...</string>
+    <string name="patient_profile_header">=== ರೋಗಿಯ ಪ್ರೊಫೈಲ್ ===</string>
+    <string name="patient_name">ಹೆಸರು</string>
+    <string name="patient_age">ವಯಸ್ಸು</string>
+    <string name="patient_sex">ಲಿಂಗ</string>
+    <string name="trial_arm">ಟ್ರಯಲ್ ಆರ್ಮ್</string>
+    <string name="comorbidities">ಸಹ-ಅಸ್ವಸ್ಥತೆಗಳು</string>
+    <string name="drug_batch">ಔಷಧಿ ಬ್ಯಾಚ್</string>
+    <string name="profile_not_found">ಬಳಕೆದಾರರ ಪ್ರೊಫೈಲ್ ಕಂಡುಬಂದಿಲ್ಲ.</string>
+    <string name="total_doses_logged">ಒಟ್ಟು ಲಾಗ್ ಮಾಡಲಾದ ಡೋಸ್‌ಗಳು</string>
+    <string name="severe_non_adherence">⚠️ ಎಚ್ಚರಿಕೆ: 0 ಡೋಸ್‌ಗಳು ಲಾಗ್ ಆಗಿವೆ. ತೀವ್ರ ಅನುಸರಣೆ ಕೊರತೆ.</string>
+    <string name="reported_adrs_header">--- ವರದಿಯಾದ ADRಗಳು ---</string>
+    <string name="no_adrs_reported">ಯಾವುದೇ ಅಡ್ಡಪರಿಣಾಮಗಳು ವರದಿಯಾಗಿಲ್ಲ.</string>
+    <string name="action_required">🚨 ಕ್ರಮ ಅಗತ್ಯವಿದೆ</string>
+    <string name="sae_warning">⚠️ ಗಂಭೀರ ಪ್ರತಿಕೂಲ ಘಟನೆ (SAE)</string>
+    <string name="status_label">ಸ್ಥಿತಿ</string>
+    <string name="date_label">ದಿನಾಂಕ</string>
+    <string name="severity_label_simple">ತೀವ್ರತೆ</string>
+    <string name="desc_label">ವಿವರಣೆ</string>
+
+    <!-- Add Patient Screen -->
+    <string name="full_name_hint">ಪೂರ್ಣ ಹೆಸರು</string>
+    <string name="age_hint">ವಯಸ್ಸು</string>
+    <string name="phone_hint">ದೂರವಾಣಿ ಸಂಖ್ಯೆ</string>
+    <string name="set_pin_hint">4-ಅಂಕಿಗಳ ಪಿನ್ ಹೊಂದಿಸಿ</string>
+    <string name="save_database">ಡೇಟಾಬೇಸ್‌ಗೆ ಉಳಿಸಿ</string>
+    <string name="registration_success">ರೋಗಿಯನ್ನು ಯಶಸ್ವಿಯಾಗಿ ನೋಂದಾಯಿಸಲಾಗಿದೆ</string>
+    <string name="registration_failed">ರೋಗಿಯನ್ನು ನೋಂದಾಯಿಸಲು ವಿಫಲವಾಗಿದೆ</string>
+    <string name="required_fields_error">ಐಡಿ, ಹೆಸರು ಮತ್ತು ಪಿನ್ ಕಡ್ಡಾಯವಾಗಿದೆ</string>
 </resources>

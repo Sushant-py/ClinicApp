@@ -35,11 +35,13 @@ public class MonitorActivity extends AppCompatActivity {
     String currentPatientId = "";
     List<DataSnapshot> cachedAdrs = new ArrayList<>();
     
-    // NEW: Flag to prevent auto-logout when opening the Add Patient screen
     private boolean isNavigatingToInternalActivity = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Updated to match the new LanguageHelper method signature (no arguments)
+        LanguageHelper.loadLocale();
+        
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_monitor);
 
@@ -54,12 +56,10 @@ public class MonitorActivity extends AppCompatActivity {
         tvActionQueueHeader = findViewById(R.id.tvActionQueueHeader);
         rgTimeFilter = findViewById(R.id.rgTimeFilter);
 
-        // LOGOUT LOGIC
         btnLogout.setOnClickListener(v -> logoutUser());
 
-        // Link to the Add Patient screen
         btnAddPatient.setOnClickListener(v -> {
-            isNavigatingToInternalActivity = true; // Set flag
+            isNavigatingToInternalActivity = true;
             Intent intent = new Intent(MonitorActivity.this, AddPatientActivity.class);
             startActivity(intent);
         });
@@ -67,7 +67,7 @@ public class MonitorActivity extends AppCompatActivity {
         btnSearchPatient.setOnClickListener(v -> {
             currentPatientId = etSearchPatientId.getText().toString().trim().toUpperCase();
             if (currentPatientId.isEmpty()) {
-                Toast.makeText(this, "Enter a Patient ID", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.patient_id_hint), Toast.LENGTH_SHORT).show();
                 return;
             }
             fetchPatientData(currentPatientId);
@@ -114,22 +114,18 @@ public class MonitorActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        isNavigatingToInternalActivity = false; // Reset flag when returning
+        isNavigatingToInternalActivity = false;
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        // Security layer: Auto-logout if user leaves the app 
-        // AND we aren't just navigating to the AddPatientActivity
-        if (!isChangingConfigurations() && !isNavigatingToInternalActivity) {
-            logoutUser();
-        }
+
     }
 
     private void logoutUser() {
         SharedPreferences prefs = getSharedPreferences("TrialPrefs", Context.MODE_PRIVATE);
-        prefs.edit().clear().apply(); // Clears saved session
+        prefs.edit().clear().apply();
 
         Intent intent = new Intent(MonitorActivity.this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -138,7 +134,7 @@ public class MonitorActivity extends AppCompatActivity {
     }
 
     private void fetchPatientData(String patientId) {
-        tvMonitorResults.setText("Loading data...\n");
+        tvMonitorResults.setText(getString(R.string.loading_data) + "\n");
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(patientId);
         DatabaseReference dosesRef = FirebaseDatabase.getInstance().getReference("doses").child(patientId);
         DatabaseReference adrsRef = FirebaseDatabase.getInstance().getReference("adrs").child(patientId);
@@ -154,15 +150,15 @@ public class MonitorActivity extends AppCompatActivity {
                     String comorbidities = snapshot.child("comorbidities").getValue(String.class);
                     String batch = snapshot.child("oilBatchNumber").getValue(String.class);
 
-                    tvMonitorResults.setText("=== PATIENT PROFILE ===\n");
-                    tvMonitorResults.append("Name: " + (name != null ? name : "N/A") + "\n");
-                    tvMonitorResults.append("Age: " + (age.equals("null") ? "N/A" : age) + " | Sex: " + (sex != null ? sex : "N/A") + "\n");
-                    tvMonitorResults.append("Trial Arm: " + (arm != null ? arm : "N/A") + "\n");
-                    tvMonitorResults.append("Comorbidities: " + (comorbidities != null ? comorbidities : "None") + "\n");
-                    tvMonitorResults.append("Drug Batch: " + (batch != null ? batch : "N/A") + "\n");
+                    tvMonitorResults.setText(getString(R.string.patient_profile_header) + "\n");
+                    tvMonitorResults.append(getString(R.string.patient_name) + ": " + (name != null ? name : "N/A") + "\n");
+                    tvMonitorResults.append(getString(R.string.patient_age) + ": " + (age.equals("null") ? "N/A" : age) + " | " + getString(R.string.patient_sex) + ": " + (sex != null ? sex : "N/A") + "\n");
+                    tvMonitorResults.append(getString(R.string.trial_arm) + ": " + (arm != null ? arm : "N/A") + "\n");
+                    tvMonitorResults.append(getString(R.string.comorbidities) + ": " + (comorbidities != null ? comorbidities : "None") + "\n");
+                    tvMonitorResults.append(getString(R.string.drug_batch) + ": " + (batch != null ? batch : "N/A") + "\n");
                     tvMonitorResults.append("========================\n\n");
                 } else {
-                    tvMonitorResults.setText("User profile not found.\n\n");
+                    tvMonitorResults.setText(getString(R.string.profile_not_found) + "\n\n");
                 }
                 fetchDosesAndAdrs(dosesRef, adrsRef);
             }
@@ -183,12 +179,12 @@ public class MonitorActivity extends AppCompatActivity {
                 long adherencePercentage = (totalDosesLogged * 100) / expectedDoses;
                 if(adherencePercentage > 100) adherencePercentage = 100;
 
-                tvAdherenceRate.setText("Aggregate Adherence: " + adherencePercentage + "%");
+                tvAdherenceRate.setText(getString(R.string.aggregate_adherence) + ": " + adherencePercentage + "%");
 
                 if (totalDosesLogged == 0) {
-                    tvMonitorResults.append("⚠️ ALERT: 0 doses logged. Severe Non-Adherence.\n");
+                    tvMonitorResults.append(getString(R.string.severe_non_adherence) + "\n");
                 } else {
-                    tvMonitorResults.append("Total Doses Logged: " + totalDosesLogged + "\n");
+                    tvMonitorResults.append(getString(R.string.total_doses_logged) + ": " + totalDosesLogged + "\n");
                 }
             }
             @Override
@@ -212,10 +208,10 @@ public class MonitorActivity extends AppCompatActivity {
     }
 
     private void applyTimeFilter() {
-        tvMonitorResults.append("\n\n--- REPORTED ADRs ---\n");
+        tvMonitorResults.append("\n\n" + getString(R.string.reported_adrs_header) + "\n");
         if (cachedAdrs.isEmpty()) {
-            tvMonitorResults.append("No adverse events reported.");
-            tvActionQueueHeader.setText("Pending Action Queue (0)");
+            tvMonitorResults.append(getString(R.string.no_adrs_reported));
+            tvActionQueueHeader.setText(getString(R.string.pending_action_queue) + " (0)");
             return;
         }
 
@@ -247,15 +243,15 @@ public class MonitorActivity extends AppCompatActivity {
                 if (timeLimitMillis == 0 || diff <= timeLimitMillis) {
                     if ("Pending".equals(action)) {
                         pendingCount++;
-                        resultsBuilder.append("🚨 ACTION REQUIRED\n");
+                        resultsBuilder.append(getString(R.string.action_required) + "\n");
                     }
                     if (isSae) {
-                        resultsBuilder.append("⚠️ SERIOUS ADVERSE EVENT (SAE)\n");
+                        resultsBuilder.append(getString(R.string.sae_warning) + "\n");
                     }
-                    resultsBuilder.append("Date: ").append(timestampStr).append("\n");
-                    resultsBuilder.append("Severity: ").append(sev).append("\n");
-                    resultsBuilder.append("Desc: ").append(desc).append("\n");
-                    resultsBuilder.append("Status: ").append(action).append("\n");
+                    resultsBuilder.append(getString(R.string.date_label) + ": ").append(timestampStr).append("\n");
+                    resultsBuilder.append(getString(R.string.severity_label_simple) + ": ").append(sev).append("\n");
+                    resultsBuilder.append(getString(R.string.desc_label) + ": ").append(desc).append("\n");
+                    resultsBuilder.append(getString(R.string.status_label) + ": ").append(action).append("\n");
                     resultsBuilder.append("--------------------\n");
                 }
             } catch (Exception e) {
@@ -263,7 +259,7 @@ public class MonitorActivity extends AppCompatActivity {
             }
         }
 
-        tvActionQueueHeader.setText("Pending Action Queue (" + pendingCount + " Required)");
+        tvActionQueueHeader.setText(getString(R.string.pending_action_queue) + " (" + pendingCount + " " + getString(R.string.action_required) + ")");
         if (resultsBuilder.length() == 0) {
             tvMonitorResults.append("No ADRs found for this time period.");
         } else {
