@@ -45,7 +45,6 @@ public class PatientActivity extends AppCompatActivity implements TextToSpeech.O
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // LOAD LOCALE FIRST - Removed (this) to fix compilation error
         LanguageHelper.loadLocale();
         
         super.onCreate(savedInstanceState);
@@ -65,7 +64,6 @@ public class PatientActivity extends AppCompatActivity implements TextToSpeech.O
         trialId = prefs.getString("USER_NAME", "Participant");
         String realName = prefs.getString("FULL_NAME", "Participant");
 
-        // Translate the Welcome string
         String welcomeBase = getString(R.string.welcome);
         tvWelcome.setText(welcomeBase + ", " + realName);
 
@@ -122,7 +120,10 @@ public class PatientActivity extends AppCompatActivity implements TextToSpeech.O
     @Override
     protected void onStop() {
         super.onStop();
-
+        // Security layer: Auto-logout if user leaves the app
+        if (!isChangingConfigurations() && !isNavigatingToInternalActivity) {
+            logoutUser();
+        }
     }
 
     private void logoutUser() {
@@ -136,7 +137,6 @@ public class PatientActivity extends AppCompatActivity implements TextToSpeech.O
     @Override
     public void onInit(int status) {
         if (status == TextToSpeech.SUCCESS) {
-            // Set TTS language based on selected locale
             String currentLang = AppCompatDelegate.getApplicationLocales().toLanguageTags();
             if (currentLang.contains("kn")) tts.setLanguage(new Locale("kn", "IN"));
             else if (currentLang.contains("hi")) tts.setLanguage(new Locale("hi", "IN"));
