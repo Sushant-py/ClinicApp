@@ -1,10 +1,12 @@
 Nasya ClinicApp
 📖 About The Project
+
 Nasya ClinicApp is a comprehensive Android-based mobile application designed for the management and monitoring of clinical trials specifically focused on "Nasya" nasal medication dosing. The application streamlines the clinical trial process by prioritizing participant safety, ensuring compliance through smart reminders, and digitizing the onboarding and consent workflows.
 
 This system serves as a bridge between trial administrators and participants, enabling real-time health tracking, adverse event reporting, and secure data logging.
 
 ✨ Key Features
+
 Clinical Eligibility Screening: Automated pre-screening checklists to qualify or disqualify participants based on strict study criteria.
 
 eConsent Module: Digital, secure informed consent forms allowing participants to review trial guidelines and agree electronically.
@@ -33,6 +35,7 @@ IDE: Android Studio
 Build System: Gradle
 
 📂 Architecture & Core Components
+
 The application follows a standard Android Activity-based architecture, separated into logical modules:
 
 EligibilityActivity / IneligibleActivity: Handles trial qualification logic.
@@ -68,7 +71,7 @@ git clone https://github.com/sushant-py/clinicapp.git
     *   Allow Android Studio to download necessary dependencies and sync the Gradle files.
 4.  **Run the App:**
     *   Select your target device or emulator from the run configurations drop-down.
-    *   Click the **Run** button (green play icon) or press `Shift + F10`.
+    *   Click the **Run** or press `Shift + F10`.
 
 
 
