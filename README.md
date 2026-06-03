@@ -1,4 +1,5 @@
 Nasya ClinicApp
+
 📖 About The Project
 
 Nasya ClinicApp is a comprehensive Android-based mobile application designed for the management and monitoring of clinical trials specifically focused on "Nasya" nasal medication dosing. The application streamlines the clinical trial process by prioritizing participant safety, ensuring compliance through smart reminders, and digitizing the onboarding and consent workflows.
