@@ -65,6 +65,21 @@
                 android:textStyle="bold"
                 android:layout_marginBottom="12dp" />
 
+            <!-- Add these buttons inside the layout housing your primary menu buttons -->
+            <Button
+                android:id="@+id/btnSymptomEvaluation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Nasal Symptom Evaluation"
+                android:layout_marginTop="16dp" />
+
+            <Button
+                android:id="@+id/btnSnotSurvey"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="SNOT-22 Health Survey"
+                android:layout_marginTop="16dp" />
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnMorning"
                 android:layout_width="match_parent"

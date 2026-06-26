@@ -46,9 +46,23 @@ public class PatientActivity extends AppCompatActivity implements TextToSpeech.O
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         LanguageHelper.loadLocale();
-        
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patient);
+        // Initialize the new buttons
+        Button btnSymptomSheet = findViewById(R.id.btnSymptomEvaluation);
+        Button btnSnotSurvey = findViewById(R.id.btnSnotSurvey);
+
+        // Add Click Listeners
+        btnSymptomSheet.setOnClickListener(v -> {
+            // isNavigatingToInternalActivity = true; // Use this if you have the lifecycle tracker running
+            startActivity(new Intent(PatientActivity.this, SymptomScoreActivity.class));
+        });
+
+        btnSnotSurvey.setOnClickListener(v -> {
+            // isNavigatingToInternalActivity = true; // Use this if you have the lifecycle tracker running
+            startActivity(new Intent(PatientActivity.this, SnotActivity.class));
+        });
 
         tts = new TextToSpeech(this, this);
 
@@ -89,7 +103,7 @@ public class PatientActivity extends AppCompatActivity implements TextToSpeech.O
         }
 
         checkConsecutiveMissedDoses();
-        
+
         btnMorning.setOnClickListener(v -> showDoseConfirmationDialog("Morning Dose", btnMorning));
         btnEvening.setOnClickListener(v -> showDoseConfirmationDialog("Evening Dose", btnEvening));
 
@@ -97,12 +111,12 @@ public class PatientActivity extends AppCompatActivity implements TextToSpeech.O
             isNavigatingToInternalActivity = true;
             startActivity(new Intent(this, AdrActivity.class));
         });
-        
+
         btnDailyDiary.setOnClickListener(v -> {
             isNavigatingToInternalActivity = true;
             startActivity(new Intent(this, DailyDiaryActivity.class));
         });
-        
+
         btnViewTutorial.setOnClickListener(v -> {
             isNavigatingToInternalActivity = true;
             startActivity(new Intent(this, InstructionalVideoActivity.class));
@@ -188,7 +202,7 @@ public class PatientActivity extends AppCompatActivity implements TextToSpeech.O
             btnMorning.setText(getString(R.string.morning) + " " + getString(R.string.overdue_suffix));
             btnMorning.setBackgroundColor(android.graphics.Color.parseColor("#FF9800"));
         }
-        
+
         if (currentHour >= 21 && !eveningLogged) {
             btnEvening.setText(getString(R.string.evening) + " " + getString(R.string.overdue_suffix));
             btnEvening.setBackgroundColor(android.graphics.Color.parseColor("#FF9800"));
@@ -263,7 +277,7 @@ public class PatientActivity extends AppCompatActivity implements TextToSpeech.O
         String currentTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
         DoseRecord newDose = new DoseRecord(trialId, currentTime, "Applied", doseType);
         FirebaseDatabase.getInstance().getReference("doses").child(trialId).push().setValue(newDose);
-        
+
         String typeLabel = doseType.contains("Morning") ? getString(R.string.morning) : getString(R.string.evening);
         lockButton(clickedButton, typeLabel);
         saveLocalLock(doseType.contains("Morning") ? "Morning" : "Evening", todayDate);
