@@ -42,10 +42,19 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <EditText
+                android:id="@+id/etPatientId"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="Enter Patient ID (Trial ID)"
+                android:background="#FFFFFF"
+                android:padding="8dp"
+                android:layout_marginBottom="16dp"/>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Select Assessment Interval"
+                android:text="Select Assessment Visit"
                 android:textStyle="bold"
                 android:layout_marginBottom="4dp"/>
 
@@ -61,29 +70,237 @@
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="12dp"
                 android:layout_marginBottom="16dp">
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="16dp">
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="1. Nasal Congestion"
+                        android:text="1. Nasal Congestion/Stuffiness"
                         android:textStyle="bold"
                         android:textSize="16sp"/>
-
                     <RadioGroup
                         android:id="@+id/rgCongestion"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
-                        <RadioButton android:id="@+id/rbCong0" android:text="0 - None"/>
-                        <RadioButton android:id="@+id/rbCong1" android:text="1 - Mild"/>
-                        <RadioButton android:id="@+id/rbCong2" android:text="2 - Moderate"/>
-                        <RadioButton android:id="@+id/rbCong3" android:text="3 - Severe"/>
+                        <RadioButton android:text="0 - None"/>
+                        <RadioButton android:text="1 - Mild"/>
+                        <RadioButton android:text="2 - Moderate"/>
+                        <RadioButton android:text="3 - Severe"/>
+                    </RadioGroup>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="12dp"
+                android:layout_marginBottom="16dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="2. Rhinorrhea (Runny Nose)"
+                        android:textStyle="bold"
+                        android:textSize="16sp"/>
+                    <RadioGroup
+                        android:id="@+id/rgRhinorrhea"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <RadioButton android:text="0 - None"/>
+                        <RadioButton android:text="1 - Mild"/>
+                        <RadioButton android:text="2 - Moderate"/>
+                        <RadioButton android:text="3 - Severe"/>
+                    </RadioGroup>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="12dp"
+                android:layout_marginBottom="16dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="3. Sneezing"
+                        android:textStyle="bold"
+                        android:textSize="16sp"/>
+                    <RadioGroup
+                        android:id="@+id/rgSneezing"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <RadioButton android:text="0 - None"/>
+                        <RadioButton android:text="1 - Mild"/>
+                        <RadioButton android:text="2 - Moderate"/>
+                        <RadioButton android:text="3 - Severe"/>
+                    </RadioGroup>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="12dp"
+                android:layout_marginBottom="16dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="4. Nasal Itching"
+                        android:textStyle="bold"
+                        android:textSize="16sp"/>
+                    <RadioGroup
+                        android:id="@+id/rgItching"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <RadioButton android:text="0 - None"/>
+                        <RadioButton android:text="1 - Mild"/>
+                        <RadioButton android:text="2 - Moderate"/>
+                        <RadioButton android:text="3 - Severe"/>
+                    </RadioGroup>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="12dp"
+                android:layout_marginBottom="16dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="5. Post-Nasal Drip"
+                        android:textStyle="bold"
+                        android:textSize="16sp"/>
+                    <RadioGroup
+                        android:id="@+id/rgPostNasal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <RadioButton android:text="0 - None"/>
+                        <RadioButton android:text="1 - Mild"/>
+                        <RadioButton android:text="2 - Moderate"/>
+                        <RadioButton android:text="3 - Severe"/>
+                    </RadioGroup>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Additional Symptoms (Optional Assessment)"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp"
+                android:textColor="#555555"/>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="12dp"
+                android:layout_marginBottom="16dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="6. Loss of Smell (Hyposmia/Anosmia)"
+                        android:textStyle="bold"
+                        android:textSize="16sp"/>
+                    <RadioGroup
+                        android:id="@+id/rgSmell"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <RadioButton android:text="0 - None"/>
+                        <RadioButton android:text="1 - Mild"/>
+                        <RadioButton android:text="2 - Moderate"/>
+                        <RadioButton android:text="3 - Severe"/>
+                    </RadioGroup>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="12dp"
+                android:layout_marginBottom="16dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="7. Eye Symptoms"
+                        android:textStyle="bold"
+                        android:textSize="16sp"/>
+                    <RadioGroup
+                        android:id="@+id/rgEye"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <RadioButton android:text="0 - None"/>
+                        <RadioButton android:text="1 - Mild"/>
+                        <RadioButton android:text="2 - Moderate"/>
+                        <RadioButton android:text="3 - Severe"/>
+                    </RadioGroup>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="12dp"
+                android:layout_marginBottom="16dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="8. Sleep Disturbance"
+                        android:textStyle="bold"
+                        android:textSize="16sp"/>
+                    <RadioGroup
+                        android:id="@+id/rgSleep"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <RadioButton android:text="0 - None"/>
+                        <RadioButton android:text="1 - Mild"/>
+                        <RadioButton android:text="2 - Moderate"/>
+                        <RadioButton android:text="3 - Severe"/>
                     </RadioGroup>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -94,7 +311,8 @@
                 android:layout_height="60dp"
                 android:text="Submit Symptom Sheet"
                 android:backgroundTint="#3F51B5"
-                android:layout_marginTop="8dp"/>
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="32dp"/>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

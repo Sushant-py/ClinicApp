@@ -6,9 +6,10 @@ import java.util.Map;
 public class SnotRecord {
     public String trialId;
     public String timestamp;
-    public String assessmentPeriod;
+    public String assessmentPeriod; // <-- Fixed variable name
     public int overallSnotTotal;
 
+    // Maps the specific symptom name to its 0-5 score
     public Map<String, Integer> symptomScores = new HashMap<>();
 
     public SnotRecord() {}

@@ -34,14 +34,18 @@ public class MonitorActivity extends AppCompatActivity {
 
     String currentPatientId = "";
     List<DataSnapshot> cachedAdrs = new ArrayList<>();
-    
+
     private boolean isNavigatingToInternalActivity = false;
+
+    // Display Caches (Ensures UI doesn't endlessly duplicate when filters change)
+    private String profileText = "";
+    private String dosesText = "";
+    private String evaluationsText = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // Updated to match the new LanguageHelper method signature (no arguments)
         LanguageHelper.loadLocale();
-        
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_monitor);
 
@@ -55,6 +59,24 @@ public class MonitorActivity extends AppCompatActivity {
         tvAdherenceRate = findViewById(R.id.tvAdherenceRate);
         tvActionQueueHeader = findViewById(R.id.tvActionQueueHeader);
         rgTimeFilter = findViewById(R.id.rgTimeFilter);
+
+        // Bind Doctor Evaluation Buttons
+        Button btnSymptomSheet = findViewById(R.id.btnDoctorSymptomEvaluation);
+        Button btnSnotSurvey = findViewById(R.id.btnDoctorSnotSurvey);
+
+        if (btnSymptomSheet != null) {
+            btnSymptomSheet.setOnClickListener(v -> {
+                isNavigatingToInternalActivity = true;
+                startActivity(new Intent(MonitorActivity.this, SymptomScoreActivity.class));
+            });
+        }
+
+        if (btnSnotSurvey != null) {
+            btnSnotSurvey.setOnClickListener(v -> {
+                isNavigatingToInternalActivity = true;
+                startActivity(new Intent(MonitorActivity.this, SnotActivity.class));
+            });
+        }
 
         btnLogout.setOnClickListener(v -> logoutUser());
 
@@ -70,12 +92,19 @@ public class MonitorActivity extends AppCompatActivity {
                 Toast.makeText(this, getString(R.string.patient_id_hint), Toast.LENGTH_SHORT).show();
                 return;
             }
+
+            // Clear caches before fetching new patient
+            profileText = "";
+            dosesText = "";
+            evaluationsText = "";
+            cachedAdrs.clear();
+
             fetchPatientData(currentPatientId);
         });
 
         rgTimeFilter.setOnCheckedChangeListener((group, checkedId) -> {
             if (!cachedAdrs.isEmpty()) {
-                applyTimeFilter();
+                applyTimeFilterAndRefreshDisplay();
             }
         });
 
@@ -117,12 +146,6 @@ public class MonitorActivity extends AppCompatActivity {
         isNavigatingToInternalActivity = false;
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-    }
-
     private void logoutUser() {
         SharedPreferences prefs = getSharedPreferences("TrialPrefs", Context.MODE_PRIVATE);
         prefs.edit().clear().apply();
@@ -150,15 +173,15 @@ public class MonitorActivity extends AppCompatActivity {
                     String comorbidities = snapshot.child("comorbidities").getValue(String.class);
                     String batch = snapshot.child("oilBatchNumber").getValue(String.class);
 
-                    tvMonitorResults.setText(getString(R.string.patient_profile_header) + "\n");
-                    tvMonitorResults.append(getString(R.string.patient_name) + ": " + (name != null ? name : "N/A") + "\n");
-                    tvMonitorResults.append(getString(R.string.patient_age) + ": " + (age.equals("null") ? "N/A" : age) + " | " + getString(R.string.patient_sex) + ": " + (sex != null ? sex : "N/A") + "\n");
-                    tvMonitorResults.append(getString(R.string.trial_arm) + ": " + (arm != null ? arm : "N/A") + "\n");
-                    tvMonitorResults.append(getString(R.string.comorbidities) + ": " + (comorbidities != null ? comorbidities : "None") + "\n");
-                    tvMonitorResults.append(getString(R.string.drug_batch) + ": " + (batch != null ? batch : "N/A") + "\n");
-                    tvMonitorResults.append("========================\n\n");
+                    profileText = getString(R.string.patient_profile_header) + "\n" +
+                            getString(R.string.patient_name) + ": " + (name != null ? name : "N/A") + "\n" +
+                            getString(R.string.patient_age) + ": " + (age.equals("null") ? "N/A" : age) + " | " + getString(R.string.patient_sex) + ": " + (sex != null ? sex : "N/A") + "\n" +
+                            getString(R.string.trial_arm) + ": " + (arm != null ? arm : "N/A") + "\n" +
+                            getString(R.string.comorbidities) + ": " + (comorbidities != null ? comorbidities : "None") + "\n" +
+                            getString(R.string.drug_batch) + ": " + (batch != null ? batch : "N/A") + "\n" +
+                            "========================\n\n";
                 } else {
-                    tvMonitorResults.setText(getString(R.string.profile_not_found) + "\n\n");
+                    profileText = getString(R.string.profile_not_found) + "\n\n";
                 }
                 fetchDosesAndAdrs(dosesRef, adrsRef);
             }
@@ -182,9 +205,9 @@ public class MonitorActivity extends AppCompatActivity {
                 tvAdherenceRate.setText(getString(R.string.aggregate_adherence) + ": " + adherencePercentage + "%");
 
                 if (totalDosesLogged == 0) {
-                    tvMonitorResults.append(getString(R.string.severe_non_adherence) + "\n");
+                    dosesText = getString(R.string.severe_non_adherence) + "\n";
                 } else {
-                    tvMonitorResults.append(getString(R.string.total_doses_logged) + ": " + totalDosesLogged + "\n");
+                    dosesText = getString(R.string.total_doses_logged) + ": " + totalDosesLogged + "\n";
                 }
             }
             @Override
@@ -200,71 +223,137 @@ public class MonitorActivity extends AppCompatActivity {
                         cachedAdrs.add(ds);
                     }
                 }
-                applyTimeFilter();
+                // Finally, fetch the clinical evaluations before rendering everything
+                fetchClinicalEvaluations(currentPatientId);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}
         });
     }
 
-    private void applyTimeFilter() {
-        tvMonitorResults.append("\n\n" + getString(R.string.reported_adrs_header) + "\n");
-        if (cachedAdrs.isEmpty()) {
-            tvMonitorResults.append(getString(R.string.no_adrs_reported));
-            tvActionQueueHeader.setText(getString(R.string.pending_action_queue) + " (0)");
-            return;
-        }
+    private void fetchClinicalEvaluations(String patientId) {
+        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
 
-        int pendingCount = 0;
-        long timeLimitMillis = 0;
-        long currentTime = System.currentTimeMillis();
+        // 1. Fetch Nasal Symptoms
+        rootRef.child("clinical_symptoms").child(patientId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    evaluationsText += "\n\n📊 NASAL SYMPTOM SCORE TIMELINE\n";
+                    for (DataSnapshot visitSnap : snapshot.getChildren()) {
+                        String visitType = visitSnap.getKey();
+                        Integer tns = visitSnap.child("totalNasalScore").getValue(Integer.class);
+                        Integer tes = visitSnap.child("totalExtendedScore").getValue(Integer.class);
+                        String time = visitSnap.child("timestamp").getValue(String.class);
 
-        int checkedId = rgTimeFilter.getCheckedRadioButtonId();
-        if (checkedId == R.id.rb24Hours) {
-            timeLimitMillis = 24L * 60 * 60 * 1000;
-        } else if (checkedId == R.id.rb72Hours) {
-            timeLimitMillis = 72L * 60 * 60 * 1000;
-        }
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-        StringBuilder resultsBuilder = new StringBuilder();
-
-        for (DataSnapshot ds : cachedAdrs) {
-            String timestampStr = ds.child("timestamp").getValue(String.class);
-            String desc = ds.child("description").getValue(String.class);
-            String sev = ds.child("severity").getValue(String.class);
-            String action = ds.child("investigatorAction").getValue(String.class);
-            boolean isSae = ds.child("isSae").getValue(Boolean.class) != null ? ds.child("isSae").getValue(Boolean.class) : false;
-
-            try {
-                Date adrDate = sdf.parse(timestampStr);
-                long diff = currentTime - adrDate.getTime();
-
-                if (timeLimitMillis == 0 || diff <= timeLimitMillis) {
-                    if ("Pending".equals(action)) {
-                        pendingCount++;
-                        resultsBuilder.append(getString(R.string.action_required) + "\n");
+                        evaluationsText += "Visit: " + visitType + " (" + time + ")\n";
+                        evaluationsText += "• Total Nasal Score: " + (tns != null ? tns : 0) + "/15\n";
+                        evaluationsText += "• Total Extended Score: " + (tes != null ? tes : 0) + "/24\n";
+                        evaluationsText += "--------------------\n";
                     }
-                    if (isSae) {
-                        resultsBuilder.append(getString(R.string.sae_warning) + "\n");
-                    }
-                    resultsBuilder.append(getString(R.string.date_label) + ": ").append(timestampStr).append("\n");
-                    resultsBuilder.append(getString(R.string.severity_label_simple) + ": ").append(sev).append("\n");
-                    resultsBuilder.append(getString(R.string.desc_label) + ": ").append(desc).append("\n");
-                    resultsBuilder.append(getString(R.string.status_label) + ": ").append(action).append("\n");
-                    resultsBuilder.append("--------------------\n");
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
+
+                // 2. Chain SNOT-22 fetch to guarantee synchronous display order
+                fetchSnotEvaluations(patientId, rootRef);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                fetchSnotEvaluations(patientId, rootRef);
+            }
+        });
+    }
+
+    private void fetchSnotEvaluations(String patientId, DatabaseReference rootRef) {
+        rootRef.child("snot_evaluations").child(patientId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    evaluationsText += "\n\n📋 SNOT-22 OUTCOME TRACKING HISTORIES\n";
+                    for (DataSnapshot recordSnap : snapshot.getChildren()) {
+                        String assessment = recordSnap.child("assessmentPeriod").getValue(String.class);
+                        if (assessment == null) assessment = "Routine Check";
+                        Integer overallTotal = recordSnap.child("overallSnotTotal").getValue(Integer.class);
+                        String time = recordSnap.child("timestamp").getValue(String.class);
+
+                        evaluationsText += "Stage: " + assessment + " (" + time + ")\n";
+                        evaluationsText += "• SNOT-22 Sum Total: " + (overallTotal != null ? overallTotal : 0) + "/110\n";
+                        evaluationsText += "--------------------\n";
+                    }
+                }
+                // Once everything is fetched, compile the view
+                applyTimeFilterAndRefreshDisplay();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                applyTimeFilterAndRefreshDisplay();
+            }
+        });
+    }
+
+    private void applyTimeFilterAndRefreshDisplay() {
+        StringBuilder adrBuilder = new StringBuilder();
+        adrBuilder.append("\n\n").append(getString(R.string.reported_adrs_header)).append("\n");
+
+        if (cachedAdrs.isEmpty()) {
+            adrBuilder.append(getString(R.string.no_adrs_reported));
+            tvActionQueueHeader.setText(getString(R.string.pending_action_queue) + " (0)");
+        } else {
+            int pendingCount = 0;
+            long timeLimitMillis = 0;
+            long currentTime = System.currentTimeMillis();
+
+            int checkedId = rgTimeFilter.getCheckedRadioButtonId();
+            if (checkedId == R.id.rb24Hours) {
+                timeLimitMillis = 24L * 60 * 60 * 1000;
+            } else if (checkedId == R.id.rb72Hours) {
+                timeLimitMillis = 72L * 60 * 60 * 1000;
+            }
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+            StringBuilder resultsBuilder = new StringBuilder();
+
+            for (DataSnapshot ds : cachedAdrs) {
+                String timestampStr = ds.child("timestamp").getValue(String.class);
+                String desc = ds.child("description").getValue(String.class);
+                String sev = ds.child("severity").getValue(String.class);
+                String action = ds.child("investigatorAction").getValue(String.class);
+                boolean isSae = ds.child("isSae").getValue(Boolean.class) != null ? ds.child("isSae").getValue(Boolean.class) : false;
+
+                try {
+                    Date adrDate = sdf.parse(timestampStr);
+                    long diff = currentTime - adrDate.getTime();
+
+                    if (timeLimitMillis == 0 || diff <= timeLimitMillis) {
+                        if ("Pending".equals(action)) {
+                            pendingCount++;
+                            resultsBuilder.append(getString(R.string.action_required)).append("\n");
+                        }
+                        if (isSae) {
+                            resultsBuilder.append(getString(R.string.sae_warning)).append("\n");
+                        }
+                        resultsBuilder.append(getString(R.string.date_label)).append(": ").append(timestampStr).append("\n");
+                        resultsBuilder.append(getString(R.string.severity_label_simple)).append(": ").append(sev).append("\n");
+                        resultsBuilder.append(getString(R.string.desc_label)).append(": ").append(desc).append("\n");
+                        resultsBuilder.append(getString(R.string.status_label)).append(": ").append(action).append("\n");
+                        resultsBuilder.append("--------------------\n");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            tvActionQueueHeader.setText(getString(R.string.pending_action_queue) + " (" + pendingCount + " " + getString(R.string.action_required) + ")");
+            if (resultsBuilder.length() == 0) {
+                adrBuilder.append("No ADRs found for this time period.");
+            } else {
+                adrBuilder.append(resultsBuilder.toString());
             }
         }
 
-        tvActionQueueHeader.setText(getString(R.string.pending_action_queue) + " (" + pendingCount + " " + getString(R.string.action_required) + ")");
-        if (resultsBuilder.length() == 0) {
-            tvMonitorResults.append("No ADRs found for this time period.");
-        } else {
-            tvMonitorResults.append(resultsBuilder.toString());
-        }
+        // Assemble the final screen layout: Profile + Doses + ADRs + Evaluation Reports
+        tvMonitorResults.setText(profileText + dosesText + adrBuilder.toString() + evaluationsText);
     }
 
     private void runDataQualityCheck(String patientId) {

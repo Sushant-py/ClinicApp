@@ -17,17 +17,21 @@
             android:id="@+id/tvSnotItemName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Symptom Name"
+            android:text="Symptom Name Placeholder"
             android:textStyle="bold"
+            android:textColor="#333333"
             android:textSize="15sp"/>
 
         <SeekBar
             android:id="@+id/sbSnotScore"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="4dp"
             android:max="5"
-            android:progress="0" />
+            android:progress="0"
+            android:progressTint="#3F51B5"
+            android:thumbTint="#3F51B5"/>
 
         <TextView
             android:id="@+id/tvSnotCurrentValue"
@@ -35,7 +39,8 @@
             android:layout_height="wrap_content"
             android:text="Score: 0 - No problem"
             android:textAlignment="viewEnd"
+            android:textColor="#555555"
             android:textSize="12sp"
-            android:layout_marginTop="4dp"/>
+            android:textStyle="italic"/>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

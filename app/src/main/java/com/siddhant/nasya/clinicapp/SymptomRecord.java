@@ -5,18 +5,21 @@ public class SymptomRecord {
     public String timestamp;
     public String visitType;
 
+    // Core Symptoms (Items 1-5)
     public int congestion;
     public int rhinorrhea;
     public int sneezing;
     public int itching;
     public int postNasalDrip;
 
+    // Additional Symptoms (Items 6-8)
     public int lossOfSmell;
     public int eyeSymptoms;
     public int sleepDisturbance;
 
-    public int totalNasalScore;
-    public int totalExtendedScore;
+    // Calculated Totals
+    public int totalNasalScore; // Out of 15
+    public int totalExtendedScore; // Out of 24
 
     public SymptomRecord() {}
 

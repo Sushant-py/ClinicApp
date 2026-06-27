@@ -50,22 +50,8 @@ public class PatientActivity extends AppCompatActivity implements TextToSpeech.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patient);
 
-        // Initialize the new buttons
-        Button btnSymptomSheet = findViewById(R.id.btnSymptomEvaluation);
-        Button btnSnotSurvey = findViewById(R.id.btnSnotSurvey);
 
-        // Add Click Listeners
-        btnSymptomSheet.setOnClickListener(v -> {
-            // This prevents the app from auto-logging out when switching screens
-            isNavigatingToInternalActivity = true;
-            startActivity(new Intent(PatientActivity.this, SymptomScoreActivity.class));
-        });
 
-        btnSnotSurvey.setOnClickListener(v -> {
-            // This prevents the app from auto-logging out when switching screens
-            isNavigatingToInternalActivity = true;
-            startActivity(new Intent(PatientActivity.this, SnotActivity.class));
-        });
 
         tts = new TextToSpeech(this, this);
 
