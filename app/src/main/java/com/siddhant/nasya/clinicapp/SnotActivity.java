@@ -26,19 +26,20 @@ import java.util.Map;
 
 public class SnotActivity extends AppCompatActivity {
 
-    // Views
+    // Global layout view instances
     EditText etPatientId, etHospital, etAssessmentDate, etDemoName, etDemoAge, etDemoContact;
-    EditText etDemoAddress, etDemoOccupation, etDurationYears, etDurationMonths;
+    EditText etDemoAddress, etDemoOccupation, etDurationYears, etDurationMonths, etAdverseDetails;
     EditText etFoodAllergy, etOtherAllergy, etDaysCompleted, etMissedReason, etInvestigatorName;
+    EditText etAntihistaminesSpecify, etDecongestantsSpecify, etCorticosteroidsSpecify, etOtherMeds;
+    EditText etCompletionDate, etDiscontOtherSpecify;
 
     Spinner spinVisitInterval, spinEducation, spinResponse, spinSatisfaction;
-    RadioGroup rgRandomization, rgGender, rgFamilyHistory, rgMissedDoses, rgSustained, rgRelapse;
-    CheckBox cbDust, cbPollen, cbPet, cbFood, cbOtherAlg;
+    RadioGroup rgRandomization, rgGender, rgFamilyHistory, rgMissedDoses, rgSustained, rgRelapse, rgAdverseSeverity, rgDiscontinuation;
+    CheckBox cbDust, cbPollen, cbPet, cbFood, cbOtherAlg, cbAntihistamines, cbDecongestants, cbCorticosteroids;
 
     LinearLayout container;
     Button btnSave;
 
-    // SNOT-22 arrays
     private final String[] snotSymptoms = {
             "Need to blow nose", "Sneezing", "Runny nose", "Nasal obstruction/blockage",
             "Loss of smell or taste", "Cough", "Post-nasal discharge", "Thick nasal discharge",
@@ -61,7 +62,7 @@ public class SnotActivity extends AppCompatActivity {
 
         initViews();
         setupSpinners();
-        setupDatePicker();
+        setupDatePickers();
         populateSurveyRows();
 
         btnSave.setOnClickListener(v -> processAndUploadSnotSurvey());
@@ -94,15 +95,29 @@ public class SnotActivity extends AppCompatActivity {
         etFoodAllergy = findViewById(R.id.etFoodAllergy);
         etOtherAllergy = findViewById(R.id.etOtherAllergy);
 
+        cbAntihistamines = findViewById(R.id.cbAntihistamines);
+        etAntihistaminesSpecify = findViewById(R.id.etAntihistaminesSpecify);
+        cbDecongestants = findViewById(R.id.cbDecongestants);
+        etDecongestantsSpecify = findViewById(R.id.etDecongestantsSpecify);
+        cbCorticosteroids = findViewById(R.id.cbCorticosteroids);
+        etCorticosteroidsSpecify = findViewById(R.id.etCorticosteroidsSpecify);
+        etOtherMeds = findViewById(R.id.etOtherMeds);
+
         container = findViewById(R.id.snotItemsContainer);
 
         etDaysCompleted = findViewById(R.id.etDaysCompleted);
         rgMissedDoses = findViewById(R.id.rgMissedDoses);
         etMissedReason = findViewById(R.id.etMissedReason);
+        rgAdverseSeverity = findViewById(R.id.rgAdverseSeverity);
+        etAdverseDetails = findViewById(R.id.etAdverseDetails);
         spinResponse = findViewById(R.id.spinResponse);
         spinSatisfaction = findViewById(R.id.spinSatisfaction);
         rgSustained = findViewById(R.id.rgSustained);
         rgRelapse = findViewById(R.id.rgRelapse);
+
+        etCompletionDate = findViewById(R.id.etCompletionDate);
+        rgDiscontinuation = findViewById(R.id.rgDiscontinuation);
+        etDiscontOtherSpecify = findViewById(R.id.etDiscontOtherSpecify);
         etInvestigatorName = findViewById(R.id.etInvestigatorName);
 
         btnSave = findViewById(R.id.btnSaveSnot);
@@ -117,7 +132,7 @@ public class SnotActivity extends AppCompatActivity {
         ArrayAdapter<String> adapterEdu = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, eduArray);
         spinEducation.setAdapter(adapterEdu);
 
-        String[] responseArray = {"Select", "Excellent (>75%)", "Good (51-75%)", "Fair (26-50%)", "Poor (<25%)"};
+        String[] responseArray = {"Select", "Excellent (>75% improvement)", "Good (51-75% improvement)", "Fair (26-50% improvement)", "Poor (<25% improvement)"};
         ArrayAdapter<String> adapterRes = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, responseArray);
         spinResponse.setAdapter(adapterRes);
 
@@ -126,13 +141,16 @@ public class SnotActivity extends AppCompatActivity {
         spinSatisfaction.setAdapter(adapterSat);
     }
 
-    private void setupDatePicker() {
-        etAssessmentDate.setOnClickListener(v -> {
-            Calendar c = Calendar.getInstance();
-            new DatePickerDialog(this, (view, year, month, dayOfMonth) ->
-                    etAssessmentDate.setText(dayOfMonth + "/" + (month + 1) + "/" + year),
-                    c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).show();
-        });
+    private void setupDatePickers() {
+        etAssessmentDate.setOnClickListener(v -> showDatePicker(etAssessmentDate));
+        etCompletionDate.setOnClickListener(v -> showDatePicker(etCompletionDate));
+    }
+
+    private void showDatePicker(EditText targetEditText) {
+        Calendar c = Calendar.getInstance();
+        new DatePickerDialog(this, (view, year, month, dayOfMonth) ->
+                targetEditText.setText(dayOfMonth + "/" + (month + 1) + "/" + year),
+                c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).show();
     }
 
     private void populateSurveyRows() {
@@ -176,12 +194,12 @@ public class SnotActivity extends AppCompatActivity {
 
         SnotRecord record = new SnotRecord(trialId, timestamp, visit);
 
-        // Core info
+        // Map Parent Identification Section
         record.hospitalCenter = etHospital.getText().toString().trim();
         record.dateOfAssessment = etAssessmentDate.getText().toString().trim();
         record.randomizationGroup = getRadioText(rgRandomization);
 
-        // Demographics
+        // Map Demographic Block
         record.patientName = etDemoName.getText().toString().trim();
         record.age = etDemoAge.getText().toString().trim();
         record.gender = getRadioText(rgGender);
@@ -190,28 +208,44 @@ public class SnotActivity extends AppCompatActivity {
         record.occupation = etDemoOccupation.getText().toString().trim();
         record.education = spinEducation.getSelectedItem().toString();
 
-        // Medical History
+        // Map Medical History
         record.durationOfRhinitis = etDurationYears.getText().toString().trim() + " Years, " + etDurationMonths.getText().toString().trim() + " Months";
         record.familyHistory = getRadioText(rgFamilyHistory);
 
-        StringBuilder alg = new StringBuilder();
-        if (cbDust.isChecked()) alg.append("Dust mites, ");
-        if (cbPollen.isChecked()) alg.append("Pollen, ");
-        if (cbPet.isChecked()) alg.append("Pet dander, ");
-        if (cbFood.isChecked()) alg.append("Food: ").append(etFoodAllergy.getText().toString()).append(", ");
-        if (cbOtherAlg.isChecked()) alg.append("Others: ").append(etOtherAllergy.getText().toString());
-        record.allergies = alg.toString();
+        StringBuilder allergyProfileBuilder = new StringBuilder();
+        if (cbDust.isChecked()) allergyProfileBuilder.append("Dust mites, ");
+        if (cbPollen.isChecked()) allergyProfileBuilder.append("Pollen, ");
+        if (cbPet.isChecked()) allergyProfileBuilder.append("Pet dander, ");
+        if (cbFood.isChecked()) allergyProfileBuilder.append("Food: ").append(etFoodAllergy.getText().toString().trim()).append(", ");
+        if (cbOtherAlg.isChecked()) allergyProfileBuilder.append("Other: ").append(etOtherAllergy.getText().toString().trim());
+        record.allergies = allergyProfileBuilder.toString();
 
-        // Follow Up & Compliance
+        // Map Current Medications
+        record.antihistamines = cbAntihistamines.isChecked() ? "Yes (" + etAntihistaminesSpecify.getText().toString().trim() + ")" : "No";
+        record.nasalDecongestants = cbDecongestants.isChecked() ? "Yes (" + etDecongestantsSpecify.getText().toString().trim() + ")" : "No";
+        record.corticosteroids = cbCorticosteroids.isChecked() ? "Yes (" + etCorticosteroidsSpecify.getText().toString().trim() + ")" : "No";
+        record.otherMedications = etOtherMeds.getText().toString().trim();
+
+        // Map Treatment Adherence & Follow Up Metrics
         record.daysCompleted = etDaysCompleted.getText().toString().trim();
         record.missedDoses = getRadioText(rgMissedDoses);
+        record.missedDosesReason = etMissedReason.getText().toString().trim();
+        record.adverseEventSeverity = getRadioText(rgAdverseSeverity);
+        record.adverseEventDetails = etAdverseDetails.getText().toString().trim();
         record.treatmentResponse = spinResponse.getSelectedItem().toString();
         record.patientSatisfaction = spinSatisfaction.getSelectedItem().toString();
         record.sustainedResponse = getRadioText(rgSustained);
         record.relapse = getRadioText(rgRelapse);
+
+        // Map Study Completion Metrics
+        record.dateOfCompletion = etCompletionDate.getText().toString().trim();
+        record.reasonForDiscontinuation = getRadioText(rgDiscontinuation);
+        if (record.reasonForDiscontinuation.equals("Other")) {
+            record.reasonForDiscontinuation += ": " + etDiscontOtherSpecify.getText().toString().trim();
+        }
         record.investigatorName = etInvestigatorName.getText().toString().trim();
 
-        // SNOT-22 Scores
+        // Map SNOT-22 Item Array & Accumulate Total Score
         int totalScoreAccumulator = 0;
         for (int i = 0; i < snotSymptoms.length; i++) {
             int ratingValue = boundSliders.get(i).getProgress();
@@ -221,13 +255,13 @@ public class SnotActivity extends AppCompatActivity {
         }
         record.overallSnotTotal = totalScoreAccumulator;
 
-        // Push to Firebase
+        // Commit to targeted interval subnode in Firebase Realtime Database
         FirebaseDatabase.getInstance().getReference("snot_evaluations")
                 .child(trialId)
                 .child(visit)
                 .setValue(record);
 
-        Toast.makeText(this, "Form Saved! Total SNOT Score: " + totalScoreAccumulator + "/110", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Complete Audit Data Logged for " + visit + "!", Toast.LENGTH_LONG).show();
         finish();
     }
 }

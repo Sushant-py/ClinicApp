@@ -24,24 +24,35 @@ public class SnotRecord {
     public String durationOfRhinitis;
     public String familyHistory;
     public String allergies;
-    public String currentMedications;
 
-    // Follow-up & Compliance
+    // Current Medications
+    public String antihistamines;
+    public String nasalDecongestants;
+    public String corticosteroids;
+    public String otherMedications;
+
+    // Follow-up, Compliance & Adverse Events
     public String daysCompleted;
     public String missedDoses;
-    public String adverseEventsNote;
+    public String missedDosesReason;
+    public String adverseEventSeverity;
+    public String adverseEventDetails;
     public String treatmentResponse;
     public String patientSatisfaction;
     public String sustainedResponse;
     public String relapse;
+
+    // Study Completion
+    public String dateOfCompletion;
+    public String reasonForDiscontinuation;
     public String investigatorName;
 
-    // SNOT-22 Data
+    // SNOT-22 Scores
     public int overallSnotTotal;
     public Map<String, Integer> symptomScores = new HashMap<>();
 
     public SnotRecord() {
-        // Default constructor required for Firebase
+        // Default constructor required for Firebase Realtime Database object deserialization
     }
 
     public SnotRecord(String trialId, String timestamp, String visitInterval) {
