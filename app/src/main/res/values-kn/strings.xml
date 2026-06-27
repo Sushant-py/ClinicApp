@@ -11,6 +11,7 @@
     <string name="daily_diary">ದೈನಂದಿನ ರೋಗಲಕ್ಷಣ ಮತ್ತು ಔಷಧಿ ಡೈರಿ</string>
     <string name="resources">ಸಂಪನ್ಮೂಲಗಳು</string>
     <string name="watch_tutorial">ಕಾರ್ಯವಿಧಾನದ ವೀಡಿಯೊವನ್ನು ವೀಕ್ಷಿಸಿ</string>
+    <string name="read_user_manual">ಬಳಕೆದಾರರ ಕೈಪಿಡಿಯನ್ನು ಓದಿ</string>
     
     <!-- Daily Diary -->
     <string name="nasal_discomfort">ಮೂಗಿನ ಅಸ್ವಸ್ಥತೆ (VAS)</string>
@@ -131,4 +132,11 @@
     <string name="registration_success">ರೋಗಿಯನ್ನು ಯಶಸ್ವಿಯಾಗಿ ನೋಂದಾಯಿಸಲಾಗಿದೆ</string>
     <string name="registration_failed">ರೋಗಿಯನ್ನು ನೋಂದಾಯಿಸಲು ವಿಫಲವಾಗಿದೆ</string>
     <string name="required_fields_error">ಐಡಿ, ಹೆಸರು ಮತ್ತು ಪಿನ್ ಕಡ್ಡಾಯವಾಗಿದೆ</string>
+
+    <!-- Nasal Symptom Score -->
+    <string name="name">ಹೆಸರು</string>
+    <string name="assessment_date">ಮೌಲ್ಯಮಾಪನದ ದಿನಾಂಕ</string>
+    <string name="assessment_time">ಮೌಲ್ಯಮಾಪನದ ಸಮಯ</string>
+    <string name="select_assessment_visit">ಮೌಲ್ಯಮಾಪನ ಭೇಟಿಯನ್ನು ಆಯ್ಕೆಮಾಡಿ</string>
+    <string name="submit_symptom_sheet">ಲಕ್ಷಣದ ಹಾಳೆಯನ್ನು ಸಲ್ಲಿಸಿ</string>
 </resources>

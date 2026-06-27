@@ -2,6 +2,9 @@ package com.siddhant.nasya.clinicapp;
 
 public class SymptomRecord {
     public String trialId;
+    public String patientName;
+    public String assessmentDate;
+    public String assessmentTime;
     public String timestamp;
     public String visitType;
 

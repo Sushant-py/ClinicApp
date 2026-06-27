@@ -144,7 +144,7 @@
             android:id="@+id/btnUserManual"
             android:layout_width="match_parent"
             android:layout_height="55dp"
-            android:text=" Read User Manual"
+            android:text="@string/read_user_manual"
             android:backgroundTint="#4CAF50"
             android:textColor="#FFFFFF" />
     </LinearLayout>
