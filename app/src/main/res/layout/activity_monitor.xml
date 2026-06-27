@@ -6,7 +6,6 @@
     android:orientation="vertical"
     android:background="@color/backgroundColor">
 
-    <!-- Blue Header -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -40,14 +39,12 @@
             android:minHeight="0dp" />
     </LinearLayout>
 
-    <!-- Main Content Container -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- Doctor Tools -->
         <Button
             android:id="@+id/btnDoctorSymptomEvaluation"
             android:layout_width="match_parent"
@@ -78,7 +75,6 @@
             android:background="#CCCCCC"
             android:layout_marginBottom="16dp"/>
 
-        <!-- Patient Search -->
         <EditText
             android:id="@+id/etSearchPatientId"
             android:layout_width="match_parent"
@@ -93,7 +89,15 @@
             android:text="@string/pull_patient_record"
             android:layout_marginBottom="8dp"/>
 
-        <!-- Analytics and Filters -->
+        <Button
+            android:id="@+id/btnDownloadPdfReport"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="📥 Download Patient PDF Report"
+            android:backgroundTint="#FF9800"
+            android:visibility="gone"
+            android:layout_marginBottom="12dp"/>
+
         <TextView
             android:id="@+id/tvAdherenceRate"
             android:layout_width="match_parent"
@@ -143,7 +147,6 @@
             android:textStyle="bold"
             android:layout_marginTop="8dp"/>
 
-        <!-- Display Area -->
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"

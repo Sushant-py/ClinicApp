@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
@@ -28,12 +29,16 @@ import java.util.Locale;
 public class MonitorActivity extends AppCompatActivity {
 
     EditText etSearchPatientId;
-    Button btnSearchPatient, btnMarkReviewed, btnRunAudit, btnAddPatient, btnLogout;
+    Button btnSearchPatient, btnMarkReviewed, btnRunAudit, btnAddPatient, btnLogout, btnDownloadPdfReport;
     TextView tvMonitorResults, tvAdherenceRate, tvActionQueueHeader;
     RadioGroup rgTimeFilter;
 
     String currentPatientId = "";
     List<DataSnapshot> cachedAdrs = new ArrayList<>();
+
+    // Cache lists for PDF generation
+    List<DataSnapshot> currentSymptomSnaps = new ArrayList<>();
+    List<DataSnapshot> currentSnotSnaps = new ArrayList<>();
 
     private boolean isNavigatingToInternalActivity = false;
 
@@ -55,6 +60,7 @@ public class MonitorActivity extends AppCompatActivity {
         btnRunAudit = findViewById(R.id.btnRunAudit);
         btnAddPatient = findViewById(R.id.btnAddPatient);
         btnLogout = findViewById(R.id.btnLogout);
+        btnDownloadPdfReport = findViewById(R.id.btnDownloadPdfReport);
         tvMonitorResults = findViewById(R.id.tvMonitorResults);
         tvAdherenceRate = findViewById(R.id.tvAdherenceRate);
         tvActionQueueHeader = findViewById(R.id.tvActionQueueHeader);
@@ -98,8 +104,26 @@ public class MonitorActivity extends AppCompatActivity {
             dosesText = "";
             evaluationsText = "";
             cachedAdrs.clear();
+            currentSymptomSnaps.clear();
+            currentSnotSnaps.clear();
+            btnDownloadPdfReport.setVisibility(View.GONE);
 
             fetchPatientData(currentPatientId);
+        });
+
+        // Trigger Download PDF task
+        btnDownloadPdfReport.setOnClickListener(v -> {
+            if (!currentPatientId.isEmpty()) {
+                PdfReportGenerator.generatePatientPdfReport(
+                        this,
+                        currentPatientId,
+                        profileText,
+                        dosesText,
+                        cachedAdrs,
+                        currentSymptomSnaps,
+                        currentSnotSnaps
+                );
+            }
         });
 
         rgTimeFilter.setOnCheckedChangeListener((group, checkedId) -> {
@@ -223,7 +247,6 @@ public class MonitorActivity extends AppCompatActivity {
                         cachedAdrs.add(ds);
                     }
                 }
-                // Finally, fetch the clinical evaluations before rendering everything
                 fetchClinicalEvaluations(currentPatientId);
             }
             @Override
@@ -241,6 +264,8 @@ public class MonitorActivity extends AppCompatActivity {
                 if (snapshot.exists()) {
                     evaluationsText += "\n\n📊 NASAL SYMPTOM SCORE TIMELINE\n";
                     for (DataSnapshot visitSnap : snapshot.getChildren()) {
+                        currentSymptomSnaps.add(visitSnap); // Cache to pass to PDF Engine
+
                         String visitType = visitSnap.getKey();
                         Integer tns = visitSnap.child("totalNasalScore").getValue(Integer.class);
                         Integer tes = visitSnap.child("totalExtendedScore").getValue(Integer.class);
@@ -271,6 +296,8 @@ public class MonitorActivity extends AppCompatActivity {
                 if (snapshot.exists()) {
                     evaluationsText += "\n\n📋 SNOT-22 OUTCOME TRACKING HISTORIES\n";
                     for (DataSnapshot recordSnap : snapshot.getChildren()) {
+                        currentSnotSnaps.add(recordSnap); // Cache to pass to PDF Engine
+
                         String assessment = recordSnap.child("assessmentPeriod").getValue(String.class);
                         if (assessment == null) assessment = "Routine Check";
                         Integer overallTotal = recordSnap.child("overallSnotTotal").getValue(Integer.class);
@@ -281,6 +308,12 @@ public class MonitorActivity extends AppCompatActivity {
                         evaluationsText += "--------------------\n";
                     }
                 }
+
+                // Reveal the Download PDF button if the profile exists
+                if(!profileText.contains("not found")) {
+                    btnDownloadPdfReport.setVisibility(View.VISIBLE);
+                }
+
                 // Once everything is fetched, compile the view
                 applyTimeFilterAndRefreshDisplay();
             }
