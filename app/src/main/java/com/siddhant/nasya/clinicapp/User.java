@@ -33,4 +33,28 @@ public class User {
         this.randomizationArm = randomizationArm;
         this.deviceId = deviceId;
     }
+    // --- NEW FIELDS FROM DATA COLLECTION FORM ---
+
+    // Study Parameters
+    public String hospitalCenter;
+    public String enrollmentDate;
+    public String randomizationGroup;
+
+    // Extended Demographics
+    public String address;
+    public String occupation;
+    public String education;
+
+    // Medical History
+    public String arDurationYears;
+    public String arDurationMonths;
+    public String familyHistoryAR;
+
+    // Allergies
+    public boolean allergyDust, allergyPollen, allergyPets, allergyFood, allergyOther;
+    public String allergyFoodDetails, allergyOtherDetails;
+
+    // Current Medications
+    public boolean medAntihistamines, medDecongestants, medCorticosteroids, medOthers;
+    public String medAntihistaminesDetails, medDecongestantsDetails, medCorticosteroidsDetails, medOthersDetails;
 }

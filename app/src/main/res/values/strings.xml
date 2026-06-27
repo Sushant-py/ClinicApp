@@ -82,6 +82,15 @@
     <string name="expiry_hint">Enter Expiry Date (MM/YYYY)</string>
     <string name="agree_submit">I Agree &amp; Submit</string>
 
+    <!-- Paste the new education array below -->
+    <string-array name="education_array">
+        <item>Primary</item>
+        <item>Secondary</item>
+        <item>Graduate</item>
+        <item>Post-graduate</item>
+        <item>Others</item>
+    </string-array>
+
     <!-- Onboarding / Tutorial Steps -->
     <string name="onboarding_welcome">Welcome to the Trial</string>
     <string name="step_1_title">Step 1: Application</string>

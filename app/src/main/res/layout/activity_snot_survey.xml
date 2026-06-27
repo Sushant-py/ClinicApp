@@ -25,9 +25,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="SNOT-22 Health Survey"
+            android:text="Data Collection Form (SNOT-22)"
             android:textColor="#FFFFFF"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:textStyle="bold"
             android:layout_marginStart="8dp"/>
     </LinearLayout>
@@ -43,44 +43,193 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/etPatientIdSnot"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:hint="Enter Patient ID (Trial ID)"
-                android:background="#FFFFFF"
-                android:padding="8dp"
-                android:layout_marginBottom="16dp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Select Assessment Visit"
-                android:textStyle="bold"
-                android:layout_marginBottom="4dp"/>
-
-            <Spinner
-                android:id="@+id/spinVisitIntervalSnot"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="#FFFFFF"
-                android:layout_marginBottom="16dp"/>
-
-            <TextView
+            <!-- CORE IDENTIFICATION -->
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Grading Scale: 0 (No Problem) to 5 (Worst Possible)"
-                android:textColor="#555555"
-                android:textSize="12sp"
-                android:textStyle="italic"
-                android:layout_marginBottom="8dp"/>
+                app:cardCornerRadius="8dp"
+                android:layout_marginBottom="16dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-            <LinearLayout
-                android:id="@+id/snotItemsContainer"
+                    <TextView android:text="PARTICIPANT IDENTIFICATION" android:textStyle="bold" android:layout_marginBottom="8dp" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+
+                    <EditText android:id="@+id/etPatientIdSnot" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Study ID (Trial ID)" android:layout_marginBottom="8dp"/>
+                    <EditText android:id="@+id/etHospital" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Hospital/Center" android:layout_marginBottom="8dp"/>
+                    <EditText android:id="@+id/etAssessmentDate" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Date of Enrollment/Assessment" android:focusable="false" android:clickable="true" android:layout_marginBottom="8dp"/>
+
+                    <TextView android:text="Select Assessment Visit:" android:layout_marginTop="8dp" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+                    <Spinner android:id="@+id/spinVisitIntervalSnot" android:layout_width="match_parent" android:layout_height="48dp" android:layout_marginBottom="8dp"/>
+
+                    <TextView android:text="Randomization Group:" android:layout_marginTop="8dp" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+                    <RadioGroup android:id="@+id/rgRandomization" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+                        <RadioButton android:text="Intervention (Nasya)" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+                        <RadioButton android:text="Control" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp"/>
+                    </RadioGroup>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- DEMOGRAPHICS -->
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-            </LinearLayout>
+                app:cardCornerRadius="8dp"
+                android:layout_marginBottom="16dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView android:text="DEMOGRAPHIC INFORMATION" android:textStyle="bold" android:layout_marginBottom="8dp" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+                    <EditText android:id="@+id/etDemoName" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Name" android:inputType="textPersonName"/>
+                    <EditText android:id="@+id/etDemoAge" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Age (Years)" android:inputType="number"/>
+
+                    <TextView android:text="Gender:" android:layout_marginTop="8dp" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+                    <RadioGroup android:id="@+id/rgGender" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+                        <RadioButton android:text="Male" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+                        <RadioButton android:text="Female" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+                        <RadioButton android:text="Other" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+                    </RadioGroup>
+
+                    <EditText android:id="@+id/etDemoContact" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Contact Number" android:inputType="phone"/>
+                    <EditText android:id="@+id/etDemoAddress" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Address"/>
+                    <EditText android:id="@+id/etDemoOccupation" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Occupation"/>
+
+                    <TextView android:text="Education:" android:layout_marginTop="8dp" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+                    <Spinner android:id="@+id/spinEducation" android:layout_width="match_parent" android:layout_height="48dp"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- MEDICAL HISTORY & ALLERGIES -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="8dp"
+                android:layout_marginBottom="16dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView android:text="MEDICAL HISTORY &amp; ALLERGIES" android:textStyle="bold" android:layout_marginBottom="8dp" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+
+                    <TextView android:text="Duration of Allergic Rhinitis:" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+                        <EditText android:id="@+id/etDurationYears" android:layout_weight="1" android:layout_width="0dp" android:layout_height="wrap_content" android:hint="Years" android:inputType="number"/>
+                        <EditText android:id="@+id/etDurationMonths" android:layout_weight="1" android:layout_width="0dp" android:layout_height="wrap_content" android:hint="Months" android:inputType="number"/>
+                    </LinearLayout>
+
+                    <TextView android:text="Family History of Allergic Rhinitis?" android:layout_marginTop="8dp" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+                    <RadioGroup android:id="@+id/rgFamilyHistory" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+                        <RadioButton android:text="Yes" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+                        <RadioButton android:text="No" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp"/>
+                    </RadioGroup>
+
+                    <TextView android:text="Known Allergies:" android:layout_marginTop="8dp" android:textStyle="bold" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+                    <CheckBox android:id="@+id/cbDust" android:text="Dust mites" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+                    <CheckBox android:id="@+id/cbPollen" android:text="Pollen" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+                    <CheckBox android:id="@+id/cbPet" android:text="Pet dander" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
+                        <CheckBox android:id="@+id/cbFood" android:text="Food:" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+                        <EditText android:id="@+id/etFoodAllergy" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Specify food"/>
+                    </LinearLayout>
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
+                        <CheckBox android:id="@+id/cbOtherAlg" android:text="Others:" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+                        <EditText android:id="@+id/etOtherAllergy" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Specify other"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- SNOT-22 AUTO-INJECTED LIST -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="8dp"
+                android:layout_marginBottom="16dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="SNOT-22 HEALTH SURVEY"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="8dp"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Grading Scale: 0 (No Problem) to 5 (Worst Possible)"
+                        android:textColor="#555555"
+                        android:textSize="12sp"
+                        android:textStyle="italic"
+                        android:layout_marginBottom="16dp"/>
+
+                    <LinearLayout
+                        android:id="@+id/snotItemsContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- FOLLOW UP & COMPLIANCE -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="8dp"
+                android:layout_marginBottom="16dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView android:text="COMPLIANCE &amp; FOLLOW-UP" android:textStyle="bold" android:layout_marginBottom="8dp" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+
+                    <EditText android:id="@+id/etDaysCompleted" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Days of treatment completed" android:inputType="number"/>
+
+                    <TextView android:text="Any missed doses?" android:layout_marginTop="8dp" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+                    <RadioGroup android:id="@+id/rgMissedDoses" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+                        <RadioButton android:text="Yes" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+                        <RadioButton android:text="No" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="16dp"/>
+                    </RadioGroup>
+                    <EditText android:id="@+id/etMissedReason" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="If yes, reason:"/>
+
+                    <TextView android:text="Overall Treatment Response:" android:layout_marginTop="16dp" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+                    <Spinner android:id="@+id/spinResponse" android:layout_width="match_parent" android:layout_height="48dp"/>
+
+                    <TextView android:text="Patient Satisfaction:" android:layout_marginTop="8dp" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+                    <Spinner android:id="@+id/spinSatisfaction" android:layout_width="match_parent" android:layout_height="48dp"/>
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="8dp">
+                        <TextView android:text="Sustained Response?" android:layout_weight="1" android:layout_width="0dp" android:layout_height="wrap_content"/>
+                        <RadioGroup android:id="@+id/rgSustained" android:layout_weight="1" android:layout_width="0dp" android:layout_height="wrap_content" android:orientation="horizontal">
+                            <RadioButton android:text="Yes" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+                            <RadioButton android:text="No" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+                        </RadioGroup>
+                    </LinearLayout>
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="8dp">
+                        <TextView android:text="Relapse?" android:layout_weight="1" android:layout_width="0dp" android:layout_height="wrap_content"/>
+                        <RadioGroup android:id="@+id/rgRelapse" android:layout_weight="1" android:layout_width="0dp" android:layout_height="wrap_content" android:orientation="horizontal">
+                            <RadioButton android:text="Yes" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+                            <RadioButton android:text="No" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+                        </RadioGroup>
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <EditText android:id="@+id/etInvestigatorName" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Investigator Name / Signature" android:layout_marginBottom="16dp" android:background="#FFFFFF" android:padding="12dp"/>
 
         </LinearLayout>
     </ScrollView>
@@ -90,8 +239,9 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_margin="16dp"
-        android:text="Save SNOT-22 Assessment"
+        android:text="Save Full Assessment"
         android:backgroundTint="#3F51B5"
+        android:textColor="#FFFFFF"
         android:textSize="16sp"
         android:textStyle="bold"/>
 

@@ -1,12 +1,16 @@
 package com.siddhant.nasya.clinicapp;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -14,6 +18,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.database.FirebaseDatabase;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
@@ -21,12 +26,19 @@ import java.util.Map;
 
 public class SnotActivity extends AppCompatActivity {
 
-    EditText etPatientId;
-    Spinner spinVisitInterval;
+    // Views
+    EditText etPatientId, etHospital, etAssessmentDate, etDemoName, etDemoAge, etDemoContact;
+    EditText etDemoAddress, etDemoOccupation, etDurationYears, etDurationMonths;
+    EditText etFoodAllergy, etOtherAllergy, etDaysCompleted, etMissedReason, etInvestigatorName;
+
+    Spinner spinVisitInterval, spinEducation, spinResponse, spinSatisfaction;
+    RadioGroup rgRandomization, rgGender, rgFamilyHistory, rgMissedDoses, rgSustained, rgRelapse;
+    CheckBox cbDust, cbPollen, cbPet, cbFood, cbOtherAlg;
+
     LinearLayout container;
     Button btnSave;
 
-    // Explicit 22 target parameters string schema extracted exactly from the documentation
+    // SNOT-22 arrays
     private final String[] snotSymptoms = {
             "Need to blow nose", "Sneezing", "Runny nose", "Nasal obstruction/blockage",
             "Loss of smell or taste", "Cough", "Post-nasal discharge", "Thick nasal discharge",
@@ -36,12 +48,10 @@ public class SnotActivity extends AppCompatActivity {
             "Frustrated/restless/irritable", "Sad", "Embarrassed"
     };
 
-    // Dictionary mapping exactly matching the 0-5 scale requirements
     private final String[] scaleDetails = {
             "No problem", "Very mild", "Mild", "Moderate", "Severe", "Worst possible"
     };
 
-    // Store references to the SeekBars programmatically so we can read them all on save
     private final Map<Integer, SeekBar> boundSliders = new HashMap<>();
 
     @Override
@@ -49,60 +59,113 @@ public class SnotActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_snot_survey);
 
-        etPatientId = findViewById(R.id.etPatientIdSnot);
-        spinVisitInterval = findViewById(R.id.spinVisitIntervalSnot);
-        container = findViewById(R.id.snotItemsContainer);
-        btnSave = findViewById(R.id.btnSaveSnot);
-
-        findViewById(R.id.btnBack).setOnClickListener(v -> finish());
-
-        // Setup Dropdown for the Assessment Interval
-        String[] intervals = {"Baseline", "Week 1", "Week 2", "Week 3", "Week 4", "Week 8", "Follow-up"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, intervals);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinVisitInterval.setAdapter(adapter);
-
+        initViews();
+        setupSpinners();
+        setupDatePicker();
         populateSurveyRows();
 
         btnSave.setOnClickListener(v -> processAndUploadSnotSurvey());
+        findViewById(R.id.btnBack).setOnClickListener(v -> finish());
     }
 
-    /**
-     * Iterates through the 22 parameters, instantiates a layout template for each,
-     * injects the titles, and mounts a listener to update the text when the slider moves.
-     */
+    private void initViews() {
+        etPatientId = findViewById(R.id.etPatientIdSnot);
+        etHospital = findViewById(R.id.etHospital);
+        etAssessmentDate = findViewById(R.id.etAssessmentDate);
+        spinVisitInterval = findViewById(R.id.spinVisitIntervalSnot);
+        rgRandomization = findViewById(R.id.rgRandomization);
+
+        etDemoName = findViewById(R.id.etDemoName);
+        etDemoAge = findViewById(R.id.etDemoAge);
+        rgGender = findViewById(R.id.rgGender);
+        etDemoContact = findViewById(R.id.etDemoContact);
+        etDemoAddress = findViewById(R.id.etDemoAddress);
+        etDemoOccupation = findViewById(R.id.etDemoOccupation);
+        spinEducation = findViewById(R.id.spinEducation);
+
+        etDurationYears = findViewById(R.id.etDurationYears);
+        etDurationMonths = findViewById(R.id.etDurationMonths);
+        rgFamilyHistory = findViewById(R.id.rgFamilyHistory);
+        cbDust = findViewById(R.id.cbDust);
+        cbPollen = findViewById(R.id.cbPollen);
+        cbPet = findViewById(R.id.cbPet);
+        cbFood = findViewById(R.id.cbFood);
+        cbOtherAlg = findViewById(R.id.cbOtherAlg);
+        etFoodAllergy = findViewById(R.id.etFoodAllergy);
+        etOtherAllergy = findViewById(R.id.etOtherAllergy);
+
+        container = findViewById(R.id.snotItemsContainer);
+
+        etDaysCompleted = findViewById(R.id.etDaysCompleted);
+        rgMissedDoses = findViewById(R.id.rgMissedDoses);
+        etMissedReason = findViewById(R.id.etMissedReason);
+        spinResponse = findViewById(R.id.spinResponse);
+        spinSatisfaction = findViewById(R.id.spinSatisfaction);
+        rgSustained = findViewById(R.id.rgSustained);
+        rgRelapse = findViewById(R.id.rgRelapse);
+        etInvestigatorName = findViewById(R.id.etInvestigatorName);
+
+        btnSave = findViewById(R.id.btnSaveSnot);
+    }
+
+    private void setupSpinners() {
+        String[] intervals = {"Baseline", "Week 1", "Week 2", "Week 3", "Week 4", "Week 8", "Follow-up"};
+        ArrayAdapter<String> adapterInt = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, intervals);
+        spinVisitInterval.setAdapter(adapterInt);
+
+        String[] eduArray = {"Select", "Primary", "Secondary", "Graduate", "Post-graduate", "Others"};
+        ArrayAdapter<String> adapterEdu = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, eduArray);
+        spinEducation.setAdapter(adapterEdu);
+
+        String[] responseArray = {"Select", "Excellent (>75%)", "Good (51-75%)", "Fair (26-50%)", "Poor (<25%)"};
+        ArrayAdapter<String> adapterRes = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, responseArray);
+        spinResponse.setAdapter(adapterRes);
+
+        String[] satArray = {"Select", "Very Satisfied", "Satisfied", "Neutral", "Dissatisfied", "Very Dissatisfied"};
+        ArrayAdapter<String> adapterSat = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, satArray);
+        spinSatisfaction.setAdapter(adapterSat);
+    }
+
+    private void setupDatePicker() {
+        etAssessmentDate.setOnClickListener(v -> {
+            Calendar c = Calendar.getInstance();
+            new DatePickerDialog(this, (view, year, month, dayOfMonth) ->
+                    etAssessmentDate.setText(dayOfMonth + "/" + (month + 1) + "/" + year),
+                    c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).show();
+        });
+    }
+
     private void populateSurveyRows() {
         LayoutInflater inflater = LayoutInflater.from(this);
-
         for (int i = 0; i < snotSymptoms.length; i++) {
             View view = inflater.inflate(R.layout.item_snot_row, container, false);
-
             TextView tvName = view.findViewById(R.id.tvSnotItemName);
             SeekBar sbScore = view.findViewById(R.id.sbSnotScore);
             TextView tvValueIndicator = view.findViewById(R.id.tvSnotCurrentValue);
 
-            // Set Title (e.g., "1. Need to blow nose")
             tvName.setText((i + 1) + ". " + snotSymptoms[i]);
-
-            // Add Listener to map numbers to the qualitative text dynamically
             sbScore.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                @Override
-                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                @Override public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                     tvValueIndicator.setText("Score: " + progress + " - " + scaleDetails[progress]);
                 }
                 @Override public void onStartTrackingTouch(SeekBar seekBar) {}
                 @Override public void onStopTrackingTouch(SeekBar seekBar) {}
             });
-
-            // Store the view reference and attach it to the parent UI container
             boundSliders.put(i, sbScore);
             container.addView(view);
         }
     }
 
+    private String getRadioText(RadioGroup rg) {
+        int id = rg.getCheckedRadioButtonId();
+        if (id != -1) {
+            return ((RadioButton) findViewById(id)).getText().toString();
+        }
+        return "N/A";
+    }
+
     private void processAndUploadSnotSurvey() {
         String trialId = etPatientId.getText().toString().trim().toUpperCase();
-
         if (trialId.isEmpty()) {
             Toast.makeText(this, "Please enter a Patient ID", Toast.LENGTH_SHORT).show();
             return;
@@ -113,29 +176,58 @@ public class SnotActivity extends AppCompatActivity {
 
         SnotRecord record = new SnotRecord(trialId, timestamp, visit);
 
+        // Core info
+        record.hospitalCenter = etHospital.getText().toString().trim();
+        record.dateOfAssessment = etAssessmentDate.getText().toString().trim();
+        record.randomizationGroup = getRadioText(rgRandomization);
 
+        // Demographics
+        record.patientName = etDemoName.getText().toString().trim();
+        record.age = etDemoAge.getText().toString().trim();
+        record.gender = getRadioText(rgGender);
+        record.contactNumber = etDemoContact.getText().toString().trim();
+        record.address = etDemoAddress.getText().toString().trim();
+        record.occupation = etDemoOccupation.getText().toString().trim();
+        record.education = spinEducation.getSelectedItem().toString();
 
+        // Medical History
+        record.durationOfRhinitis = etDurationYears.getText().toString().trim() + " Years, " + etDurationMonths.getText().toString().trim() + " Months";
+        record.familyHistory = getRadioText(rgFamilyHistory);
+
+        StringBuilder alg = new StringBuilder();
+        if (cbDust.isChecked()) alg.append("Dust mites, ");
+        if (cbPollen.isChecked()) alg.append("Pollen, ");
+        if (cbPet.isChecked()) alg.append("Pet dander, ");
+        if (cbFood.isChecked()) alg.append("Food: ").append(etFoodAllergy.getText().toString()).append(", ");
+        if (cbOtherAlg.isChecked()) alg.append("Others: ").append(etOtherAllergy.getText().toString());
+        record.allergies = alg.toString();
+
+        // Follow Up & Compliance
+        record.daysCompleted = etDaysCompleted.getText().toString().trim();
+        record.missedDoses = getRadioText(rgMissedDoses);
+        record.treatmentResponse = spinResponse.getSelectedItem().toString();
+        record.patientSatisfaction = spinSatisfaction.getSelectedItem().toString();
+        record.sustainedResponse = getRadioText(rgSustained);
+        record.relapse = getRadioText(rgRelapse);
+        record.investigatorName = etInvestigatorName.getText().toString().trim();
+
+        // SNOT-22 Scores
         int totalScoreAccumulator = 0;
-
-        // Iterate over all 22 sliders, capture scores, and calculate total /110
         for (int i = 0; i < snotSymptoms.length; i++) {
             int ratingValue = boundSliders.get(i).getProgress();
             totalScoreAccumulator += ratingValue;
-
-            // Format string keys for Firebase compatibility (removes invalid characters)
             String safeKey = snotSymptoms[i].replace("/", "_").replace("'", "");
             record.symptomScores.put(safeKey, ratingValue);
         }
-
         record.overallSnotTotal = totalScoreAccumulator;
 
-        // Push to Firebase Realtime Database
+        // Push to Firebase
         FirebaseDatabase.getInstance().getReference("snot_evaluations")
                 .child(trialId)
                 .child(visit)
                 .setValue(record);
 
-        Toast.makeText(this, "SNOT-22 Logged for " + trialId + " (Score: " + totalScoreAccumulator + "/110)", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Form Saved! Total SNOT Score: " + totalScoreAccumulator + "/110", Toast.LENGTH_LONG).show();
         finish();
     }
 }

@@ -43,59 +43,76 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/etNewPatientId"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/trial_id_hint"
-                android:inputType="textCapCharacters"
-                android:layout_marginBottom="8dp"/>
+            <!-- Trial Access Info -->
+            <EditText android:id="@+id/etNewPatientId" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="@string/trial_id_hint" android:inputType="textCapCharacters" android:layout_marginBottom="8dp"/>
+            <EditText android:id="@+id/etNewPatientPin" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="@string/set_pin_hint" android:inputType="numberPassword" android:maxLength="4" android:layout_marginBottom="16dp"/>
 
-            <EditText
-                android:id="@+id/etNewPatientName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/full_name_hint"
-                android:inputType="textPersonName"
-                android:layout_marginBottom="8dp"/>
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#CCCCCC" android:layout_marginBottom="16dp"/>
 
-            <EditText
-                android:id="@+id/etNewPatientAge"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/age_hint"
-                android:inputType="number"
-                android:layout_marginBottom="8dp"/>
+            <!-- Demographics -->
+            <EditText android:id="@+id/etNewPatientName" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="@string/full_name_hint" android:inputType="textPersonName" android:layout_marginBottom="8dp"/>
+            <EditText android:id="@+id/etNewPatientAge" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="@string/age_hint" android:inputType="number" android:layout_marginBottom="8dp"/>
+            
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Sex:"/>
+            <Spinner android:id="@+id/spinNewPatientSex" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp"/>
+            
+            <EditText android:id="@+id/etNewPatientPhone" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="@string/phone_hint" android:inputType="phone" android:layout_marginBottom="8dp"/>
+            <EditText android:id="@+id/etAddress" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Address" android:layout_marginBottom="8dp"/>
+            <EditText android:id="@+id/etOccupation" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Occupation" android:layout_marginBottom="8dp"/>
+            
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Education:"/>
+            <Spinner android:id="@+id/spinEducation" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="16dp"/>
 
-            <Spinner
-                android:id="@+id/spinNewPatientSex"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"/>
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#CCCCCC" android:layout_marginBottom="16dp"/>
 
-            <EditText
-                android:id="@+id/etNewPatientPhone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/phone_hint"
-                android:inputType="phone"
-                android:layout_marginBottom="8dp"/>
+            <!-- Clinical Info -->
+            <EditText android:id="@+id/etHospitalCenter" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Hospital/Center" android:layout_marginBottom="8dp"/>
+            
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Randomization Group:" android:layout_marginTop="8dp"/>
+            <RadioGroup android:id="@+id/rgRandomization" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+                <RadioButton android:id="@+id/rbIntervention" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Intervention" android:checked="true"/>
+                <RadioButton android:id="@+id/rbControl" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Control"/>
+            </RadioGroup>
 
-            <EditText
-                android:id="@+id/etNewPatientPin"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/set_pin_hint"
-                android:inputType="numberPassword"
-                android:maxLength="4"
-                android:layout_marginBottom="16dp"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Duration of Allergic Rhinitis:" android:layout_marginTop="12dp"/>
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+                <EditText android:id="@+id/etDurationYears" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:hint="Years" android:inputType="number"/>
+                <EditText android:id="@+id/etDurationMonths" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:hint="Months" android:inputType="number"/>
+            </LinearLayout>
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Family History of AR:" android:layout_marginTop="12dp"/>
+            <RadioGroup android:id="@+id/rgFamilyHistory" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+                <RadioButton android:id="@+id/rbFamYes" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Yes"/>
+                <RadioButton android:id="@+id/rbFamNo" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="No" android:checked="true"/>
+            </RadioGroup>
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="History of Allergies:" android:textStyle="bold" android:layout_marginTop="16dp"/>
+            <CheckBox android:id="@+id/cbDust" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Dust mite"/>
+            <CheckBox android:id="@+id/cbPollen" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Pollen"/>
+            <CheckBox android:id="@+id/cbPets" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Pets"/>
+            <CheckBox android:id="@+id/cbFood" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Food allergens"/>
+            <EditText android:id="@+id/etFoodDetails" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Specify food" android:visibility="gone"/>
+            <CheckBox android:id="@+id/cbOtherAllergy" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Other Allergies"/>
+            <EditText android:id="@+id/etOtherAllergyDetails" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Specify others" android:visibility="gone"/>
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Current/Past Medications:" android:textStyle="bold" android:layout_marginTop="16dp"/>
+            <CheckBox android:id="@+id/cbAntihistamines" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Antihistamines"/>
+            <EditText android:id="@+id/etAntiDetails" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Specify" android:visibility="gone"/>
+            <CheckBox android:id="@+id/cbDecongestants" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Decongestants"/>
+            <EditText android:id="@+id/etDecongestantsDetails" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Specify" android:visibility="gone"/>
+            <CheckBox android:id="@+id/cbCorticosteroids" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Corticosteroids"/>
+            <EditText android:id="@+id/etCorticosteroidsDetails" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Specify" android:visibility="gone"/>
+            <CheckBox android:id="@+id/cbOtherMeds" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Others"/>
+            <EditText android:id="@+id/etOtherMedsDetails" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Specify" android:visibility="gone"/>
 
             <Button
                 android:id="@+id/btnSavePatient"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
                 android:text="@string/save_database"
-                android:backgroundTint="#4CAF50"/>
+                android:backgroundTint="#4CAF50"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="32dp"/>
 
         </LinearLayout>
     </ScrollView>
