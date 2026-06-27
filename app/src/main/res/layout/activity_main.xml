@@ -139,5 +139,13 @@
                     app:cornerRadius="12dp" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
+
+        <Button
+            android:id="@+id/btnUserManual"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:text=" Read User Manual"
+            android:backgroundTint="#4CAF50"
+            android:textColor="#FFFFFF" />
     </LinearLayout>
 </RelativeLayout>

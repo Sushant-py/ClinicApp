@@ -15,7 +15,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.core.os.LocaleListCompat;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -27,13 +26,14 @@ public class MainActivity extends AppCompatActivity {
 
     EditText etTrialId, etPin;
     Spinner spinRole, spinLanguage;
-    Button btnLogin;
+    Button btnLogin, btnUserManual;
     SharedPreferences prefs;
-    
+
     private boolean isFirstSelection = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        LanguageHelper.loadLocale();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
         spinRole = findViewById(R.id.spinRole);
         spinLanguage = findViewById(R.id.spinLanguage);
         btnLogin = findViewById(R.id.btnLogin);
+        btnUserManual = findViewById(R.id.btnUserManual);
 
         // 1. Setup Roles Spinner
         String[] roles = {"Participant", "Monitor"};
@@ -70,13 +71,12 @@ public class MainActivity extends AppCompatActivity {
                     isFirstSelection = false;
                     return;
                 }
-                
+
                 String selectedLang = "en";
                 if (position == 1) selectedLang = "kn";
                 else if (position == 2) selectedLang = "hi";
 
                 if (!currentLang.contains(selectedLang)) {
-                    // Pass MainActivity.this to satisfy the new setLocale(Activity, String) signature
                     LanguageHelper.setLocale(MainActivity.this, selectedLang);
                 }
             }
@@ -85,6 +85,11 @@ public class MainActivity extends AppCompatActivity {
         });
 
         btnLogin.setOnClickListener(v -> attemptLogin());
+
+        // Launch User Manual
+        btnUserManual.setOnClickListener(v -> {
+            startActivity(new Intent(MainActivity.this, UserManualActivity.class));
+        });
 
         // AUTO-LOGIN: If they have a saved session, route them immediately.
         String savedId = prefs.getString("USER_NAME", "");
