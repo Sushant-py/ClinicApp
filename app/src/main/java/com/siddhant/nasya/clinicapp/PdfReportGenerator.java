@@ -79,7 +79,7 @@ public class PdfReportGenerator {
                 paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
                 drawWrappedText(pdfDocument, paint, "Visit: " + snap.getKey() + " (" + snap.child("timestamp").getValue() + ")");
                 paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
-                
+
                 String scores = "Congestion: " + snap.child("congestion").getValue() + ", " +
                                 "Rhinorrhea: " + snap.child("rhinorrhea").getValue() + ", " +
                                 "Sneezing: " + snap.child("sneezing").getValue() + ", " +
