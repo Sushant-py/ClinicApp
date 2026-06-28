@@ -25,6 +25,9 @@ public class PdfReportGenerator {
     private static PdfDocument.Page currentPage = null;
     private static Canvas currentCanvas = null;
     private static int pageNumber = 1;
+    private static String mPatientId = "";
+    private static final int LEFT_MARGIN = 40;
+    private static final int RIGHT_MARGIN = 555;
 
     public static void generatePatientPdfReport(Context context, String patientId,
                                                 String profileText, String dosesText,
@@ -35,157 +38,180 @@ public class PdfReportGenerator {
         PdfDocument pdfDocument = new PdfDocument();
         Paint paint = new Paint();
         pageNumber = 1;
+        mPatientId = patientId;
 
         // Start Page 1
         currentPage = startNewPage(pdfDocument);
         currentCanvas = currentPage.getCanvas();
 
-        // 1. Draw PDF Branding Header Bar
+        // 1. Branding Header
         paint.setColor(Color.parseColor("#3F51B5"));
         currentCanvas.drawRect(0, 0, 595, 80, paint);
 
         paint.setColor(Color.WHITE);
-        paint.setTextSize(20f); // Fixed: Replaced '20sp' with standard float literal
+        paint.setTextSize(22f);
         paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-        currentCanvas.drawText("CLINICAL TRIAL PATIENT REPORT", 30, 45, paint);
+        currentCanvas.drawText("CLINICAL TRIAL: COMPREHENSIVE PATIENT RECORD", 30, 45, paint);
 
-        paint.setTextSize(10f); // Fixed: Replaced '10sp' with float literal
+        paint.setTextSize(10f);
         paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.ITALIC));
         String currentTimestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
-        currentCanvas.drawText("Generated on: " + currentTimestamp, 30, 65, paint);
+        currentCanvas.drawText("Official Report | Generated: " + currentTimestamp, 30, 65, paint);
 
         currentY = 110;
 
-        // 2. Section: Demographic Profile
-        checkPageOverflow(pdfDocument, 40);
-        paint.setTextSize(14f);
-        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-        paint.setColor(Color.parseColor("#3F51B5"));
-        currentCanvas.drawText("1. Participant Demographics & Trial Context", 30, currentY, paint);
-        currentY += 6;
-        paint.setColor(Color.parseColor("#CCCCCC"));
-        currentCanvas.drawLine(30, currentY, 565, currentY, paint);
-        currentY += 18;
+        // 2. Demographic Profile Section
+        drawSectionHeader(pdfDocument, paint, "1. PARTICIPANT DEMOGRAPHICS");
+        drawWrappedText(pdfDocument, paint, profileText);
 
-        paint.setColor(Color.BLACK);
-        paint.setTextSize(11f);
-        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
-
-        String[] profileLines = profileText.split("\n");
-        for (String line : profileLines) {
-            if (!line.trim().isEmpty() && !line.contains("==")) {
-                checkPageOverflow(pdfDocument, 20);
-                currentCanvas.drawText(line, 35, currentY, paint);
-                currentY += 16;
-            }
-        }
-
-        // 3. Section: Adherence Overview
-        checkPageOverflow(pdfDocument, 40);
+        // 3. Adherence Overview
+        drawSectionHeader(pdfDocument, paint, "2. DOSE ADHERENCE STATUS");
+        drawWrappedText(pdfDocument, paint, dosesText);
         currentY += 10;
-        paint.setTextSize(14f);
-        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-        paint.setColor(Color.parseColor("#3F51B5"));
-        currentCanvas.drawText("2. Dose Adherence Audit", 30, currentY, paint);
-        currentY += 6;
-        paint.setColor(Color.parseColor("#CCCCCC"));
-        currentCanvas.drawLine(30, currentY, 565, currentY, paint);
-        currentY += 18;
 
-        paint.setColor(Color.BLACK);
-        paint.setTextSize(11f);
-        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
-        checkPageOverflow(pdfDocument, 20);
-        currentCanvas.drawText(dosesText.replace("\n", ""), 35, currentY, paint);
-        currentY += 24;
-
-        // 4. Section: Symptom Scores Timeline Table
-        checkPageOverflow(pdfDocument, 50);
-        paint.setTextSize(14f);
-        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-        paint.setColor(Color.parseColor("#3F51B5"));
-        currentCanvas.drawText("3. Nasal Symptom Evaluation Sheets Tracker", 30, currentY, paint);
-        currentY += 6;
-        paint.setColor(Color.parseColor("#CCCCCC"));
-        currentCanvas.drawLine(30, currentY, 565, currentY, paint);
-        currentY += 18;
-
-        // Draw Table Header
-        paint.setColor(Color.parseColor("#E0E0E0"));
-        currentCanvas.drawRect(30, currentY, 565, currentY + 20, paint);
-        paint.setColor(Color.BLACK);
-        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-        currentCanvas.drawText("Assessment Visit", 35, currentY + 14, paint);
-        currentCanvas.drawText("Total Nasal Score (/15)", 200, currentY + 14, paint);
-        currentCanvas.drawText("Total Extended Score (/24)", 380, currentY + 14, paint);
-        currentY += 20;
-
-        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
+        // 4. Detailed Nasal Symptom Evaluations
+        drawSectionHeader(pdfDocument, paint, "3. NASAL SYMPTOM EVALUATION LOGS");
         if (symptomSnapshots.isEmpty()) {
-            checkPageOverflow(pdfDocument, 20);
-            currentCanvas.drawText("No evaluation sheets logged for this participant.", 35, currentY + 15, paint);
-            currentY += 25;
+            drawWrappedText(pdfDocument, paint, "No clinical symptom records found.");
         } else {
             for (DataSnapshot snap : symptomSnapshots) {
-                checkPageOverflow(pdfDocument, 20);
-                currentCanvas.drawText(String.valueOf(snap.getKey()), 35, currentY + 15, paint);
-                currentCanvas.drawText(String.valueOf(snap.child("totalNasalScore").getValue()), 200, currentY + 15, paint);
-                currentCanvas.drawText(String.valueOf(snap.child("totalExtendedScore").getValue()), 380, currentY + 15, paint);
-                currentY += 20;
+                checkPageOverflow(pdfDocument, 100);
+                paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+                drawWrappedText(pdfDocument, paint, "Visit: " + snap.getKey() + " (" + snap.child("timestamp").getValue() + ")");
+                paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
+                
+                String scores = "Congestion: " + snap.child("congestion").getValue() + ", " +
+                                "Rhinorrhea: " + snap.child("rhinorrhea").getValue() + ", " +
+                                "Sneezing: " + snap.child("sneezing").getValue() + ", " +
+                                "Itching: " + snap.child("itching").getValue() + ", " +
+                                "Post-Nasal: " + snap.child("postNasalDrip").getValue();
+                drawWrappedText(pdfDocument, paint, "  • Core (0-3): " + scores);
+                
+                String extended = "Loss of Smell: " + snap.child("lossOfSmell").getValue() + ", " +
+                                  "Eye: " + snap.child("eyeSymptoms").getValue() + ", " +
+                                  "Sleep: " + snap.child("sleepDisturbance").getValue();
+                drawWrappedText(pdfDocument, paint, "  • Ext (0-3): " + extended);
+                
+                paint.setColor(Color.parseColor("#D32F2F"));
+                drawWrappedText(pdfDocument, paint, "  >> Total Nasal Score: " + snap.child("totalNasalScore").getValue() + "/15 | Extended: " + snap.child("totalExtendedScore").getValue() + "/24");
+                paint.setColor(Color.BLACK);
+                currentY += 8;
             }
         }
 
-        // 5. Section: SNOT-22 Records
-        checkPageOverflow(pdfDocument, 50);
-        currentY += 10;
-        paint.setTextSize(14f);
-        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-        paint.setColor(Color.parseColor("#3F51B5"));
-        currentCanvas.drawText("4. Sino-Nasal Outcome Test (SNOT-22) History", 30, currentY, paint);
-        currentY += 6;
-        paint.setColor(Color.parseColor("#CCCCCC"));
-        currentCanvas.drawLine(30, currentY, 565, currentY, paint);
-        currentY += 18;
-
-        // Draw Table Header
-        paint.setColor(Color.parseColor("#E0E0E0"));
-        currentCanvas.drawRect(30, currentY, 565, currentY + 20, paint);
-        paint.setColor(Color.BLACK);
-        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-        currentCanvas.drawText("Assessment Interval", 35, currentY + 14, paint);
-        currentCanvas.drawText("Aggregated SNOT Total Score Matrix", 250, currentY + 14, paint);
-        currentY += 20;
-
-        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
+        // 5. SNOT-22 & Detailed Audit History
+        drawSectionHeader(pdfDocument, paint, "4. SNOT-22 & CLINICAL AUDIT HISTORY");
         if (snotSnapshots.isEmpty()) {
-            checkPageOverflow(pdfDocument, 20);
-            currentCanvas.drawText("No SNOT-22 surveys logged for this participant.", 35, currentY + 15, paint);
-            currentY += 25;
+            drawWrappedText(pdfDocument, paint, "No SNOT-22 survey data recorded.");
         } else {
             for (DataSnapshot snap : snotSnapshots) {
-                checkPageOverflow(pdfDocument, 20);
-                String label = snap.child("assessmentPeriod").getValue(String.class);
-                if (label == null) label = "Routine Check";
-                currentCanvas.drawText(label, 35, currentY + 15, paint);
-                currentCanvas.drawText(snap.child("overallSnotTotal").getValue() + " / 110 Points", 250, currentY + 15, paint);
-                currentY += 20;
+                checkPageOverflow(pdfDocument, 150);
+                paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+                drawWrappedText(pdfDocument, paint, "Assessment Stage: " + snap.child("visitInterval").getValue() + " (" + snap.child("timestamp").getValue() + ")");
+                paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
+
+                drawWrappedText(pdfDocument, paint, "  • SNOT-22 TOTAL: " + snap.child("overallSnotTotal").getValue() + " / 110");
+                drawWrappedText(pdfDocument, paint, "  • Medical History: Duration: " + snap.child("durationOfRhinitis").getValue() + " | Family History: " + snap.child("familyHistory").getValue());
+                drawWrappedText(pdfDocument, paint, "  • Allergies: " + snap.child("allergies").getValue());
+                
+                String meds = "Anti-H: " + snap.child("antihistamines").getValue() + 
+                              " | Decong: " + snap.child("nasalDecongestants").getValue() + 
+                              " | Steroids: " + snap.child("corticosteroids").getValue();
+                drawWrappedText(pdfDocument, paint, "  • Medications: " + meds);
+                
+                drawWrappedText(pdfDocument, paint, "  • Adherence: " + snap.child("daysCompleted").getValue() + " days completed. Missed: " + snap.child("missedDoses").getValue() + " (" + snap.child("missedDosesReason").getValue() + ")");
+                drawWrappedText(pdfDocument, paint, "  • Adverse Events: Severity: " + snap.child("adverseEventSeverity").getValue() + " | Details: " + snap.child("adverseEventDetails").getValue());
+                drawWrappedText(pdfDocument, paint, "  • Outcome: Response: " + snap.child("treatmentResponse").getValue() + " | Satisfaction: " + snap.child("patientSatisfaction").getValue());
+                
+                if (snap.hasChild("reasonForDiscontinuation")) {
+                     drawWrappedText(pdfDocument, paint, "  • DISCONTINUATION: " + snap.child("reasonForDiscontinuation").getValue());
+                }
+                drawWrappedText(pdfDocument, paint, "  • Investigator Signature: " + snap.child("investigatorName").getValue());
+                
+                currentY += 12;
             }
         }
 
+        // 6. ADR Section
+        drawSectionHeader(pdfDocument, paint, "5. REPORTED ADVERSE DRUG REACTIONS (ADRs)");
+        if (adrSnapshots.isEmpty()) {
+            drawWrappedText(pdfDocument, paint, "No ADRs reported for this participant.");
+        } else {
+            for (DataSnapshot snap : adrSnapshots) {
+                checkPageOverflow(pdfDocument, 60);
+                String desc = snap.child("description").getValue(String.class);
+                String sev = snap.child("severity").getValue(String.class);
+                String date = snap.child("timestamp").getValue(String.class);
+                drawWrappedText(pdfDocument, paint, "• [" + date + "] SEVERITY: " + sev);
+                drawWrappedText(pdfDocument, paint, "  Description: " + desc);
+                currentY += 5;
+            }
+        }
+
+        drawFooter();
         pdfDocument.finishPage(currentPage);
 
-        // File Writing Logic
+        // Save File
         File pdfFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-        File pdfFile = new File(pdfFolder, "Patient_" + patientId + "_Clinical_Summary.pdf");
+        File pdfFile = new File(pdfFolder, "Trial_Report_" + patientId + "_" + System.currentTimeMillis() + ".pdf");
 
         try {
             pdfDocument.writeTo(new FileOutputStream(pdfFile));
-            Toast.makeText(context, "PDF saved to Downloads folder!", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "Report Generated: " + pdfFile.getName(), Toast.LENGTH_LONG).show();
         } catch (IOException e) {
             e.printStackTrace();
-            Toast.makeText(context, "Error printing PDF: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         } finally {
             pdfDocument.close();
+        }
+    }
+
+    private static void drawSectionHeader(PdfDocument doc, Paint paint, String title) {
+        checkPageOverflow(doc, 45);
+        currentY += 15;
+        paint.setTextSize(14f);
+        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+        paint.setColor(Color.parseColor("#3F51B5"));
+        currentCanvas.drawText(title, LEFT_MARGIN, currentY, paint);
+        currentY += 5;
+        paint.setColor(Color.parseColor("#CCCCCC"));
+        currentCanvas.drawLine(LEFT_MARGIN, currentY, RIGHT_MARGIN, currentY, paint);
+        currentY += 15;
+        paint.setColor(Color.BLACK);
+        paint.setTextSize(11f);
+        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
+    }
+
+    private static void drawWrappedText(PdfDocument doc, Paint paint, String text) {
+        if (text == null) return;
+        
+        String[] lines = text.split("\n");
+        for (String lineText : lines) {
+            if (lineText.trim().isEmpty() || lineText.contains("==")) continue;
+            
+            int maxWidth = RIGHT_MARGIN - LEFT_MARGIN;
+            String[] words = lineText.split(" ");
+            StringBuilder currentLine = new StringBuilder();
+            
+            for (String word : words) {
+                String testLine = currentLine.length() == 0 ? word : currentLine.toString() + " " + word;
+                float width = paint.measureText(testLine);
+                
+                if (width > maxWidth) {
+                    checkPageOverflow(doc, 20);
+                    currentCanvas.drawText(currentLine.toString(), LEFT_MARGIN, currentY, paint);
+                    currentY += 16;
+                    currentLine = new StringBuilder(word);
+                } else {
+                    currentLine = new StringBuilder(testLine);
+                }
+            }
+            
+            if (currentLine.length() > 0) {
+                checkPageOverflow(doc, 20);
+                currentCanvas.drawText(currentLine.toString(), LEFT_MARGIN, currentY, paint);
+                currentY += 16;
+            }
         }
     }
 
@@ -197,14 +223,22 @@ public class PdfReportGenerator {
     }
 
     private static void checkPageOverflow(PdfDocument doc, int requiredSpace) {
-        // If content height reaches near the bottom of standard A4 canvas boundaries (842 points)
         if (currentY + requiredSpace > 790) {
+            drawFooter();
             if (currentPage != null) {
                 doc.finishPage(currentPage);
             }
             currentPage = startNewPage(doc);
             currentCanvas = currentPage.getCanvas();
-            currentY = 50; // Reset top y margin layout anchor on next sheet page
+            currentY = 60;
         }
+    }
+
+    private static void drawFooter() {
+        Paint p = new Paint();
+        p.setTextSize(8f);
+        p.setColor(Color.GRAY);
+        p.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.ITALIC));
+        currentCanvas.drawText("Confidential Clinical Record | ID: " + mPatientId + " | Page " + (pageNumber - 1), LEFT_MARGIN, 820, p);
     }
 }

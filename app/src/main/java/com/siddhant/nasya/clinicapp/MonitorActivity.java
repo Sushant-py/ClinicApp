@@ -34,6 +34,8 @@ public class MonitorActivity extends AppCompatActivity {
     RadioGroup rgTimeFilter;
 
     String currentPatientId = "";
+    String currentPatientName = "";
+    String currentPatientAge = "";
     List<DataSnapshot> cachedAdrs = new ArrayList<>();
 
     // Cache lists for PDF generation
@@ -66,6 +68,15 @@ public class MonitorActivity extends AppCompatActivity {
         tvActionQueueHeader = findViewById(R.id.tvActionQueueHeader);
         rgTimeFilter = findViewById(R.id.rgTimeFilter);
 
+        tvMonitorResults.setOnClickListener(v -> {
+            String data = tvMonitorResults.getText().toString();
+            if (!currentPatientId.isEmpty() && !data.equals("No data loaded.") && !data.startsWith(getString(R.string.loading_data))) {
+                Intent intent = new Intent(MonitorActivity.this, PatientDetailsActivity.class);
+                intent.putExtra("patientData", data);
+                startActivity(intent);
+            }
+        });
+
         // Bind Doctor Evaluation Buttons
         Button btnSymptomSheet = findViewById(R.id.btnDoctorSymptomEvaluation);
         Button btnSnotSurvey = findViewById(R.id.btnDoctorSnotSurvey);
@@ -73,14 +84,21 @@ public class MonitorActivity extends AppCompatActivity {
         if (btnSymptomSheet != null) {
             btnSymptomSheet.setOnClickListener(v -> {
                 isNavigatingToInternalActivity = true;
-                startActivity(new Intent(MonitorActivity.this, SymptomScoreActivity.class));
+                Intent intent = new Intent(MonitorActivity.this, SymptomScoreActivity.class);
+                intent.putExtra("patientId", currentPatientId);
+                intent.putExtra("patientName", currentPatientName);
+                startActivity(intent);
             });
         }
 
         if (btnSnotSurvey != null) {
             btnSnotSurvey.setOnClickListener(v -> {
                 isNavigatingToInternalActivity = true;
-                startActivity(new Intent(MonitorActivity.this, SnotActivity.class));
+                Intent intent = new Intent(MonitorActivity.this, SnotActivity.class);
+                intent.putExtra("patientId", currentPatientId);
+                intent.putExtra("patientName", currentPatientName);
+                intent.putExtra("patientAge", currentPatientAge);
+                startActivity(intent);
             });
         }
 
@@ -191,7 +209,9 @@ public class MonitorActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     String name = snapshot.child("fullName").getValue(String.class);
+                    currentPatientName = name != null ? name : "";
                     String age = String.valueOf(snapshot.child("age").getValue());
+                    currentPatientAge = age.equals("null") ? "" : age;
                     String sex = snapshot.child("sex").getValue(String.class);
                     String arm = snapshot.child("randomizationArm").getValue(String.class);
                     String comorbidities = snapshot.child("comorbidities").getValue(String.class);
@@ -262,23 +282,32 @@ public class MonitorActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
-                    evaluationsText += "\n\n📊 NASAL SYMPTOM SCORE TIMELINE\n";
+                    evaluationsText += "\n\n=== [SECTION: NASAL SYMPTOM SCORES] ===\n";
                     for (DataSnapshot visitSnap : snapshot.getChildren()) {
-                        currentSymptomSnaps.add(visitSnap); // Cache to pass to PDF Engine
+                        currentSymptomSnaps.add(visitSnap);
 
                         String visitType = visitSnap.getKey();
                         Integer tns = visitSnap.child("totalNasalScore").getValue(Integer.class);
                         Integer tes = visitSnap.child("totalExtendedScore").getValue(Integer.class);
                         String time = visitSnap.child("timestamp").getValue(String.class);
 
-                        evaluationsText += "Visit: " + visitType + " (" + time + ")\n";
-                        evaluationsText += "• Total Nasal Score: " + (tns != null ? tns : 0) + "/15\n";
-                        evaluationsText += "• Total Extended Score: " + (tes != null ? tes : 0) + "/24\n";
-                        evaluationsText += "--------------------\n";
+                        evaluationsText += "\n[Visit: " + visitType.toUpperCase() + "]\n";
+                        evaluationsText += "  - Date: " + visitSnap.child("assessmentDate").getValue() + " " + visitSnap.child("assessmentTime").getValue() + "\n";
+                        evaluationsText += "  - Logged at: " + time + "\n";
+                        evaluationsText += "  [Symptom Ratings]\n";
+                        evaluationsText += "    • Congestion: " + visitSnap.child("congestion").getValue() + "\n";
+                        evaluationsText += "    • Rhinorrhea: " + visitSnap.child("rhinorrhea").getValue() + "\n";
+                        evaluationsText += "    • Sneezing: " + visitSnap.child("sneezing").getValue() + "\n";
+                        evaluationsText += "    • Itching: " + visitSnap.child("itching").getValue() + "\n";
+                        evaluationsText += "    • Post-Nasal Drip: " + visitSnap.child("postNasalDrip").getValue() + "\n";
+                        evaluationsText += "    >> TOTAL NASAL SCORE: " + (tns != null ? tns : 0) + "/15\n";
+                        evaluationsText += "    • Loss of Smell: " + visitSnap.child("lossOfSmell").getValue() + "\n";
+                        evaluationsText += "    • Eye Symptoms: " + visitSnap.child("eyeSymptoms").getValue() + "\n";
+                        evaluationsText += "    • Sleep Disturbance: " + visitSnap.child("sleepDisturbance").getValue() + "\n";
+                        evaluationsText += "    >> TOTAL EXTENDED SCORE: " + (tes != null ? tes : 0) + "/24\n";
+                        evaluationsText += "------------------------------------------\n";
                     }
                 }
-
-                // 2. Chain SNOT-22 fetch to guarantee synchronous display order
                 fetchSnotEvaluations(patientId, rootRef);
             }
 
@@ -294,27 +323,61 @@ public class MonitorActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
-                    evaluationsText += "\n\n📋 SNOT-22 OUTCOME TRACKING HISTORIES\n";
+                    evaluationsText += "\n\n=== [SECTION: SNOT-22 & CLINICAL AUDIT] ===\n";
                     for (DataSnapshot recordSnap : snapshot.getChildren()) {
-                        currentSnotSnaps.add(recordSnap); // Cache to pass to PDF Engine
+                        currentSnotSnaps.add(recordSnap);
 
-                        String assessment = recordSnap.child("assessmentPeriod").getValue(String.class);
-                        if (assessment == null) assessment = "Routine Check";
-                        Integer overallTotal = recordSnap.child("overallSnotTotal").getValue(Integer.class);
+                        String assessment = recordSnap.child("visitInterval").getValue(String.class);
+                        if (assessment == null) assessment = recordSnap.getKey();
                         String time = recordSnap.child("timestamp").getValue(String.class);
 
-                        evaluationsText += "Stage: " + assessment + " (" + time + ")\n";
-                        evaluationsText += "• SNOT-22 Sum Total: " + (overallTotal != null ? overallTotal : 0) + "/110\n";
-                        evaluationsText += "--------------------\n";
+                        evaluationsText += "\n[Visit: " + assessment.toUpperCase() + "]\n";
+                        evaluationsText += "  - Logged at: " + time + "\n";
+                        evaluationsText += "  - SNOT-22 Total Score: " + recordSnap.child("overallSnotTotal").getValue() + "/110\n";
+                        
+                        evaluationsText += "  [1. Clinical Context]\n";
+                        evaluationsText += "    - Randomization: " + recordSnap.child("randomizationGroup").getValue() + "\n";
+                        evaluationsText += "    - Center: " + recordSnap.child("hospitalCenter").getValue() + "\n";
+                        evaluationsText += "    - History: " + recordSnap.child("durationOfRhinitis").getValue() + " (Family Hist: " + recordSnap.child("familyHistory").getValue() + ")\n";
+                        evaluationsText += "    - Allergies: " + recordSnap.child("allergies").getValue() + "\n";
+                        
+                        evaluationsText += "  [2. Medications]\n";
+                        evaluationsText += "    - Antihistamines: " + recordSnap.child("antihistamines").getValue() + "\n";
+                        evaluationsText += "    - Decongestants: " + recordSnap.child("nasalDecongestants").getValue() + "\n";
+                        evaluationsText += "    - Corticosteroids: " + recordSnap.child("corticosteroids").getValue() + "\n";
+                        evaluationsText += "    - Other Meds: " + recordSnap.child("otherMedications").getValue() + "\n";
+
+                        evaluationsText += "  [3. Compliance & Outcomes]\n";
+                        evaluationsText += "    - Days Completed: " + recordSnap.child("daysCompleted").getValue() + "\n";
+                        evaluationsText += "    - Missed Doses: " + recordSnap.child("missedDoses").getValue() + " (Reason: " + recordSnap.child("missedDosesReason").getValue() + ")\n";
+                        evaluationsText += "    - Adverse Event: " + recordSnap.child("adverseEventSeverity").getValue() + " - " + recordSnap.child("adverseEventDetails").getValue() + "\n";
+                        evaluationsText += "    - Treatment Response: " + recordSnap.child("treatmentResponse").getValue() + "\n";
+                        evaluationsText += "    - Satisfaction: " + recordSnap.child("patientSatisfaction").getValue() + "\n";
+                        evaluationsText += "    - Response Sustained: " + recordSnap.child("sustainedResponse").getValue() + " | Relapse: " + recordSnap.child("relapse").getValue() + "\n";
+
+                        if (recordSnap.hasChild("reasonForDiscontinuation")) {
+                            String reason = recordSnap.child("reasonForDiscontinuation").getValue(String.class);
+                            if (reason != null && !reason.equals("N/A") && !reason.isEmpty()) {
+                                evaluationsText += "    - DISCONTINUATION REASON: " + reason + "\n";
+                            }
+                        }
+
+                        DataSnapshot scoresSnap = recordSnap.child("symptomScores");
+                        if (scoresSnap.exists()) {
+                            evaluationsText += "  [4. Itemized SNOT-22 Scores]\n";
+                            for (DataSnapshot item : scoresSnap.getChildren()) {
+                                evaluationsText += "    • " + item.getKey() + ": " + item.getValue() + "\n";
+                            }
+                        }
+                        
+                        evaluationsText += "  - Investigator Signature: " + recordSnap.child("investigatorName").getValue() + "\n";
+                        evaluationsText += "------------------------------------------\n";
                     }
                 }
 
-                // Reveal the Download PDF button if the profile exists
                 if(!profileText.contains("not found")) {
                     btnDownloadPdfReport.setVisibility(View.VISIBLE);
                 }
-
-                // Once everything is fetched, compile the view
                 applyTimeFilterAndRefreshDisplay();
             }
 

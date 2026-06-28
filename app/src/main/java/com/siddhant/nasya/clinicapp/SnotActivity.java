@@ -27,17 +27,18 @@ import java.util.Map;
 public class SnotActivity extends AppCompatActivity {
 
     // Global layout view instances
-    EditText etPatientId, etHospital, etAssessmentDate, etDemoName, etDemoAge, etDemoContact;
-    EditText etDemoAddress, etDemoOccupation, etDurationYears, etDurationMonths, etAdverseDetails;
+    EditText etPatientId, etHospital, etAssessmentDate, etDemoName, etDemoAge, etDemoGender, etDemoAddress;
+    EditText etDurationYears, etDurationMonths, etAdverseDetails;
     EditText etFoodAllergy, etOtherAllergy, etDaysCompleted, etMissedReason, etInvestigatorName;
     EditText etAntihistaminesSpecify, etDecongestantsSpecify, etCorticosteroidsSpecify, etOtherMeds;
     EditText etCompletionDate, etDiscontOtherSpecify;
 
-    Spinner spinVisitInterval, spinEducation, spinResponse, spinSatisfaction;
-    RadioGroup rgRandomization, rgGender, rgFamilyHistory, rgMissedDoses, rgSustained, rgRelapse, rgAdverseSeverity, rgDiscontinuation;
+    Spinner spinVisitInterval, spinResponse, spinSatisfaction;
+    RadioGroup rgRandomization, rgFamilyHistory, rgMissedDoses, rgSustained, rgRelapse, rgAdverseSeverity, rgDiscontinuation;
     CheckBox cbDust, cbPollen, cbPet, cbFood, cbOtherAlg, cbAntihistamines, cbDecongestants, cbCorticosteroids;
 
     LinearLayout container;
+    androidx.cardview.widget.CardView cardStudyCompletion;
     Button btnSave;
 
     private final String[] snotSymptoms = {
@@ -65,6 +66,21 @@ public class SnotActivity extends AppCompatActivity {
         setupDatePickers();
         populateSurveyRows();
 
+        // Pre-fill Patient ID if passed
+        String prefillId = getIntent().getStringExtra("patientId");
+        if (prefillId != null && !prefillId.isEmpty()) {
+            etPatientId.setText(prefillId);
+            loadPatientProfile(prefillId);
+        }
+
+        etPatientId.addTextChangedListener(new android.text.TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override public void afterTextChanged(android.text.Editable s) {
+                loadPatientProfile(s.toString().trim().toUpperCase());
+            }
+        });
+
         btnSave.setOnClickListener(v -> processAndUploadSnotSurvey());
         findViewById(R.id.btnBack).setOnClickListener(v -> finish());
     }
@@ -78,11 +94,8 @@ public class SnotActivity extends AppCompatActivity {
 
         etDemoName = findViewById(R.id.etDemoName);
         etDemoAge = findViewById(R.id.etDemoAge);
-        rgGender = findViewById(R.id.rgGender);
-        etDemoContact = findViewById(R.id.etDemoContact);
+        etDemoGender = findViewById(R.id.etDemoGender);
         etDemoAddress = findViewById(R.id.etDemoAddress);
-        etDemoOccupation = findViewById(R.id.etDemoOccupation);
-        spinEducation = findViewById(R.id.spinEducation);
 
         etDurationYears = findViewById(R.id.etDurationYears);
         etDurationMonths = findViewById(R.id.etDurationMonths);
@@ -120,6 +133,7 @@ public class SnotActivity extends AppCompatActivity {
         etDiscontOtherSpecify = findViewById(R.id.etDiscontOtherSpecify);
         etInvestigatorName = findViewById(R.id.etInvestigatorName);
 
+        cardStudyCompletion = findViewById(R.id.cardStudyCompletion);
         btnSave = findViewById(R.id.btnSaveSnot);
     }
 
@@ -128,9 +142,20 @@ public class SnotActivity extends AppCompatActivity {
         ArrayAdapter<String> adapterInt = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, intervals);
         spinVisitInterval.setAdapter(adapterInt);
 
-        String[] eduArray = {"Select", "Primary", "Secondary", "Graduate", "Post-graduate", "Others"};
-        ArrayAdapter<String> adapterEdu = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, eduArray);
-        spinEducation.setAdapter(adapterEdu);
+        spinVisitInterval.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(android.widget.AdapterView<?> parent, View view, int position, long id) {
+                String selected = intervals[position];
+                if (selected.equals("Week 8") || selected.equals("Follow-up")) {
+                    cardStudyCompletion.setVisibility(View.VISIBLE);
+                } else {
+                    cardStudyCompletion.setVisibility(View.GONE);
+                }
+                loadExistingVisitData(selected);
+            }
+            @Override
+            public void onNothingSelected(android.widget.AdapterView<?> parent) {}
+        });
 
         String[] responseArray = {"Select", "Excellent (>75% improvement)", "Good (51-75% improvement)", "Fair (26-50% improvement)", "Poor (<25% improvement)"};
         ArrayAdapter<String> adapterRes = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, responseArray);
@@ -151,6 +176,195 @@ public class SnotActivity extends AppCompatActivity {
         new DatePickerDialog(this, (view, year, month, dayOfMonth) ->
                 targetEditText.setText(dayOfMonth + "/" + (month + 1) + "/" + year),
                 c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).show();
+    }
+
+    private void loadPatientProfile(String patientId) {
+        if (patientId.isEmpty()) return;
+        FirebaseDatabase.getInstance().getReference("users").child(patientId)
+                .addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {
+                    @Override
+                    public void onDataChange(@androidx.annotation.NonNull com.google.firebase.database.DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            etDemoName.setText(snapshot.child("fullName").getValue(String.class));
+                            etDemoAge.setText(String.valueOf(snapshot.child("age").getValue()));
+                            etDemoGender.setText(snapshot.child("sex").getValue(String.class));
+                            etDemoAddress.setText(snapshot.child("address").getValue(String.class));
+                            etHospital.setText(snapshot.child("hospitalCenter").getValue(String.class));
+                            
+                            String group = snapshot.child("randomizationGroup").getValue(String.class);
+                            if ("Intervention".equalsIgnoreCase(group)) {
+                                ((RadioButton) rgRandomization.getChildAt(0)).setChecked(true);
+                            } else if ("Control".equalsIgnoreCase(group)) {
+                                ((RadioButton) rgRandomization.getChildAt(1)).setChecked(true);
+                            }
+                        }
+                    }
+                    @Override
+                    public void onCancelled(@androidx.annotation.NonNull com.google.firebase.database.DatabaseError error) {}
+                });
+    }
+
+    private void loadExistingVisitData(String visit) {
+        String patientId = etPatientId.getText().toString().trim().toUpperCase();
+        if (patientId.isEmpty()) return;
+
+        FirebaseDatabase.getInstance().getReference("snot_evaluations")
+                .child(patientId).child(visit).addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {
+                    @Override
+                    public void onDataChange(@androidx.annotation.NonNull com.google.firebase.database.DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            SnotRecord record = snapshot.getValue(SnotRecord.class);
+                            if (record != null) {
+                                etAssessmentDate.setText(record.dateOfAssessment);
+                                etHospital.setText(record.hospitalCenter);
+                                setRadioByText(rgRandomization, record.randomizationGroup);
+
+                                if (record.durationOfRhinitis != null && record.durationOfRhinitis.contains("Years")) {
+                                    String[] parts = record.durationOfRhinitis.split(",");
+                                    etDurationYears.setText(parts[0].replace(" Years", "").trim());
+                                    if (parts.length > 1) {
+                                        etDurationMonths.setText(parts[1].replace(" Months", "").trim());
+                                    }
+                                }
+
+                                setRadioByText(rgFamilyHistory, record.familyHistory);
+
+                                // Allergies
+                                cbDust.setChecked(record.allergies != null && record.allergies.contains("Dust mites"));
+                                cbPollen.setChecked(record.allergies != null && record.allergies.contains("Pollen"));
+                                cbPet.setChecked(record.allergies != null && record.allergies.contains("Pet dander"));
+                                cbFood.setChecked(record.allergies != null && record.allergies.contains("Food:"));
+                                if (cbFood.isChecked()) {
+                                    int start = record.allergies.indexOf("Food: ") + 6;
+                                    int end = record.allergies.indexOf(",", start);
+                                    if (end == -1) end = record.allergies.length();
+                                    etFoodAllergy.setText(record.allergies.substring(start, end));
+                                }
+                                cbOtherAlg.setChecked(record.allergies != null && record.allergies.contains("Other:"));
+                                if (cbOtherAlg.isChecked()) {
+                                    int start = record.allergies.indexOf("Other: ") + 7;
+                                    etOtherAllergy.setText(record.allergies.substring(start));
+                                }
+
+                                // Medications
+                                parseMedication(record.antihistamines, cbAntihistamines, etAntihistaminesSpecify);
+                                parseMedication(record.nasalDecongestants, cbDecongestants, etDecongestantsSpecify);
+                                parseMedication(record.corticosteroids, cbCorticosteroids, etCorticosteroidsSpecify);
+                                etOtherMeds.setText(record.otherMedications);
+
+                                etDaysCompleted.setText(record.daysCompleted);
+                                setRadioByText(rgMissedDoses, record.missedDoses);
+                                etMissedReason.setText(record.missedDosesReason);
+                                setRadioByText(rgAdverseSeverity, record.adverseEventSeverity);
+                                etAdverseDetails.setText(record.adverseEventDetails);
+
+                                setSpinnerValue(spinResponse, record.treatmentResponse);
+                                setSpinnerValue(spinSatisfaction, record.patientSatisfaction);
+
+                                setRadioByText(rgSustained, record.sustainedResponse);
+                                setRadioByText(rgRelapse, record.relapse);
+
+                                etCompletionDate.setText(record.dateOfCompletion);
+                                String discReason = record.reasonForDiscontinuation;
+                                if (discReason != null && discReason.contains(":")) {
+                                    setRadioByText(rgDiscontinuation, "Other");
+                                    etDiscontOtherSpecify.setText(discReason.substring(discReason.indexOf(":") + 1).trim());
+                                } else {
+                                    setRadioByText(rgDiscontinuation, discReason);
+                                }
+
+                                etInvestigatorName.setText(record.investigatorName);
+
+                                // Map SNOT-22 Scores back to sliders
+                                for (int i = 0; i < snotSymptoms.length; i++) {
+                                    String safeKey = snotSymptoms[i].replace("/", "_").replace("'", "");
+                                    if (record.symptomScores.containsKey(safeKey)) {
+                                        boundSliders.get(i).setProgress(record.symptomScores.get(safeKey));
+                                    }
+                                }
+                                Toast.makeText(SnotActivity.this, "Existing SNOT-22 data loaded", Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            clearFields();
+                        }
+                    }
+                    @Override
+                    public void onCancelled(@androidx.annotation.NonNull com.google.firebase.database.DatabaseError error) {}
+                });
+    }
+
+    private void parseMedication(String data, CheckBox cb, EditText et) {
+        if (data != null && data.startsWith("Yes")) {
+            cb.setChecked(true);
+            if (data.contains("(") && data.contains(")")) {
+                et.setText(data.substring(data.indexOf("(") + 1, data.indexOf(")")));
+            }
+        } else {
+            cb.setChecked(false);
+            et.setText("");
+        }
+    }
+
+    private void setSpinnerValue(Spinner spinner, String value) {
+        if (value == null) return;
+        ArrayAdapter adapter = (ArrayAdapter) spinner.getAdapter();
+        for (int i = 0; i < adapter.getCount(); i++) {
+            if (adapter.getItem(i).toString().equalsIgnoreCase(value)) {
+                spinner.setSelection(i);
+                return;
+            }
+        }
+    }
+
+    private void clearFields() {
+        etAssessmentDate.setText("");
+        etDurationYears.setText("");
+        etDurationMonths.setText("");
+        rgFamilyHistory.clearCheck();
+        cbDust.setChecked(false);
+        cbPollen.setChecked(false);
+        cbPet.setChecked(false);
+        cbFood.setChecked(false);
+        etFoodAllergy.setText("");
+        cbOtherAlg.setChecked(false);
+        etOtherAllergy.setText("");
+        cbAntihistamines.setChecked(false);
+        etAntihistaminesSpecify.setText("");
+        cbDecongestants.setChecked(false);
+        etDecongestantsSpecify.setText("");
+        cbCorticosteroids.setChecked(false);
+        etCorticosteroidsSpecify.setText("");
+        etOtherMeds.setText("");
+        etDaysCompleted.setText("");
+        rgMissedDoses.clearCheck();
+        etMissedReason.setText("");
+        rgAdverseSeverity.clearCheck();
+        etAdverseDetails.setText("");
+        spinResponse.setSelection(0);
+        spinSatisfaction.setSelection(0);
+        rgSustained.clearCheck();
+        rgRelapse.clearCheck();
+        etCompletionDate.setText("");
+        rgDiscontinuation.clearCheck();
+        etDiscontOtherSpecify.setText("");
+        etInvestigatorName.setText("");
+        for (SeekBar sb : boundSliders.values()) {
+            sb.setProgress(0);
+        }
+    }
+
+    private void setRadioByText(RadioGroup rg, String text) {
+        if (text == null || text.isEmpty() || text.equals("N/A")) {
+            rg.clearCheck();
+            return;
+        }
+        for (int i = 0; i < rg.getChildCount(); i++) {
+            RadioButton rb = (RadioButton) rg.getChildAt(i);
+            if (rb.getText().toString().equalsIgnoreCase(text) || (text.startsWith(rb.getText().toString()) && text.contains(":"))) {
+                rb.setChecked(true);
+                return;
+            }
+        }
     }
 
     private void populateSurveyRows() {
@@ -189,6 +403,19 @@ public class SnotActivity extends AppCompatActivity {
             return;
         }
 
+        String investigator = etInvestigatorName.getText().toString().trim();
+        if (investigator.isEmpty()) {
+            Toast.makeText(this, "Investigator signature/name is required", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (cardStudyCompletion.getVisibility() == View.VISIBLE) {
+            if (etCompletionDate.getText().toString().trim().isEmpty()) {
+                Toast.makeText(this, "Completion Date is required for this visit", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+
         String timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
         String visit = spinVisitInterval.getSelectedItem().toString();
 
@@ -198,15 +425,6 @@ public class SnotActivity extends AppCompatActivity {
         record.hospitalCenter = etHospital.getText().toString().trim();
         record.dateOfAssessment = etAssessmentDate.getText().toString().trim();
         record.randomizationGroup = getRadioText(rgRandomization);
-
-        // Map Demographic Block
-        record.patientName = etDemoName.getText().toString().trim();
-        record.age = etDemoAge.getText().toString().trim();
-        record.gender = getRadioText(rgGender);
-        record.contactNumber = etDemoContact.getText().toString().trim();
-        record.address = etDemoAddress.getText().toString().trim();
-        record.occupation = etDemoOccupation.getText().toString().trim();
-        record.education = spinEducation.getSelectedItem().toString();
 
         // Map Medical History
         record.durationOfRhinitis = etDurationYears.getText().toString().trim() + " Years, " + etDurationMonths.getText().toString().trim() + " Months";

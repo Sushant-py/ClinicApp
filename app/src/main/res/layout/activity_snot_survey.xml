@@ -58,8 +58,8 @@
 
                     <TextView android:text="PARTICIPANT IDENTIFICATION" android:textStyle="bold" android:textColor="#3F51B5" android:layout_marginBottom="8dp" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
 
-                    <EditText android:id="@+id/etPatientIdSnot" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Study ID / Trial ID" android:layout_marginBottom="8dp"/>
-                    <EditText android:id="@+id/etHospital" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Hospital / Center" android:layout_marginBottom="8dp"/>
+                    <EditText android:id="@+id/etPatientIdSnot" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Patient/Trial ID" android:layout_marginBottom="8dp"/>
+                    <EditText android:id="@+id/etHospital" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Hospital / Center (Read-only)" android:focusable="false" android:background="#F0F0F0" android:padding="8dp" android:layout_marginBottom="8dp"/>
                     <EditText android:id="@+id/etAssessmentDate" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Date of Enrollment/Assessment" android:focusable="false" android:clickable="true" android:layout_marginBottom="8dp"/>
 
                     <TextView android:text="Select Assessment Visit Interval:" android:layout_marginTop="8dp" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
@@ -73,7 +73,7 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- CARD 2: DEMOGRAPHIC INFORMATION -->
+            <!-- CARD 2: DEMOGRAPHIC INFORMATION (Read-Only) -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -85,23 +85,11 @@
                     android:orientation="vertical"
                     android:padding="16dp">
 
-                    <TextView android:text="DEMOGRAPHIC INFORMATION" android:textStyle="bold" android:textColor="#3F51B5" android:layout_marginBottom="8dp" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
-                    <EditText android:id="@+id/etDemoName" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Full Name" android:inputType="textPersonName"/>
-                    <EditText android:id="@+id/etDemoAge" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Age (Years)" android:inputType="number"/>
-
-                    <TextView android:text="Gender:" android:layout_marginTop="8dp" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
-                    <RadioGroup android:id="@+id/rgGender" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
-                        <RadioButton android:text="Male" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
-                        <RadioButton android:text="Female" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
-                        <RadioButton android:text="Other" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
-                    </RadioGroup>
-
-                    <EditText android:id="@+id/etDemoContact" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Contact Number" android:inputType="phone"/>
-                    <EditText android:id="@+id/etDemoAddress" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Address"/>
-                    <EditText android:id="@+id/etDemoOccupation" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Occupation"/>
-
-                    <TextView android:text="Education Background:" android:layout_marginTop="8dp" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
-                    <Spinner android:id="@+id/spinEducation" android:layout_width="match_parent" android:layout_height="48dp"/>
+                    <TextView android:text="PARTICIPANT PROFILE (FROM REGISTER)" android:textStyle="bold" android:textColor="#3F51B5" android:layout_marginBottom="8dp" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+                    <EditText android:id="@+id/etDemoName" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Full Name" android:focusable="false" android:background="#F0F0F0" android:padding="8dp" android:layout_marginBottom="4dp"/>
+                    <EditText android:id="@+id/etDemoAge" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Age" android:focusable="false" android:background="#F0F0F0" android:padding="8dp" android:layout_marginBottom="4dp"/>
+                    <EditText android:id="@+id/etDemoGender" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Gender" android:focusable="false" android:background="#F0F0F0" android:padding="8dp" android:layout_marginBottom="4dp"/>
+                    <EditText android:id="@+id/etDemoAddress" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Address" android:focusable="false" android:background="#F0F0F0" android:padding="8dp" android:layout_marginBottom="4dp"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -270,10 +258,12 @@
 
             <!-- CARD 7: STUDY COMPLETION -->
             <androidx.cardview.widget.CardView
+                android:id="@+id/cardStudyCompletion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="8dp"
-                android:layout_marginBottom="16dp">
+                android:layout_marginBottom="16dp"
+                android:visibility="gone">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

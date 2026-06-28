@@ -4,23 +4,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SnotRecord {
-    public String trialId;
+    public String patientId;
     public String timestamp;
     public String visitInterval;
     public String dateOfAssessment;
     public String hospitalCenter;
     public String randomizationGroup;
 
-    // Demographics
-    public String patientName;
-    public String age;
-    public String gender;
-    public String contactNumber;
-    public String address;
-    public String occupation;
-    public String education;
+    // Removed redundant demographics (Name, Age, Gender, etc. are in users node)
 
-    // Medical History
+    // Medical History (Keep as it might change or be visit-specific clinical notes)
     public String durationOfRhinitis;
     public String familyHistory;
     public String allergies;
@@ -55,8 +48,8 @@ public class SnotRecord {
         // Default constructor required for Firebase Realtime Database object deserialization
     }
 
-    public SnotRecord(String trialId, String timestamp, String visitInterval) {
-        this.trialId = trialId;
+    public SnotRecord(String patientId, String timestamp, String visitInterval) {
+        this.patientId = patientId;
         this.timestamp = timestamp;
         this.visitInterval = visitInterval;
     }

@@ -46,7 +46,7 @@
                 android:id="@+id/etPatientId"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:hint="@string/patient_id_hint"
+                android:hint="Patient/Trial ID"
                 android:background="#FFFFFF"
                 android:padding="8dp"
                 android:layout_marginBottom="12dp"/>
@@ -55,9 +55,10 @@
                 android:id="@+id/etPatientName"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:hint="@string/name"
+                android:hint="Patient Name (Read-only)"
                 android:inputType="textPersonName"
-                android:background="#FFFFFF"
+                android:background="#F0F0F0"
+                android:focusable="false"
                 android:padding="8dp"
                 android:layout_marginBottom="12dp"/>
 

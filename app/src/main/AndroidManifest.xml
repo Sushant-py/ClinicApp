@@ -58,6 +58,9 @@
             android:name=".PatientActivity"
             android:exported="false" />
         <activity
+            android:name=".PatientDetailsActivity"
+            android:exported="false" />
+        <activity
             android:name=".ConsentActivity"
             android:exported="false" />
         <activity

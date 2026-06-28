@@ -40,6 +40,21 @@ public class SymptomScoreActivity extends AppCompatActivity {
         spinInterval = findViewById(R.id.spinVisitInterval);
         btnSubmit = findViewById(R.id.btnSubmitSymptoms);
 
+        // Pre-fill Patient ID if passed from MonitorActivity
+        String prefillId = getIntent().getStringExtra("patientId");
+        if (prefillId != null && !prefillId.isEmpty()) {
+            etPatientId.setText(prefillId);
+            loadPatientName(prefillId);
+        }
+
+        etPatientId.addTextChangedListener(new android.text.TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override public void afterTextChanged(android.text.Editable s) {
+                loadPatientName(s.toString().trim().toUpperCase());
+            }
+        });
+
         // Bind Core Nasal Symptom RadioGroup view mappings
         rgCongestion = findViewById(R.id.rgCongestion);
         rgRhinorrhea = findViewById(R.id.rgRhinorrhea);
@@ -60,11 +75,7 @@ public class SymptomScoreActivity extends AppCompatActivity {
         // Time Picker Setup
         etAssessmentTime.setOnClickListener(v -> showTimePicker());
 
-        // Setup Dropdown for the Assessment Interval
-        String[] intervals = {"Baseline", "Week 1", "Week 2", "Week 4", "Week 8"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, intervals);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinInterval.setAdapter(adapter);
+        setupSpinners();
 
         btnSubmit.setOnClickListener(v -> compileAndUploadScores());
     }
@@ -85,6 +96,87 @@ public class SymptomScoreActivity extends AppCompatActivity {
         }, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), true).show();
     }
 
+    private void setupSpinners() {
+        // Setup Dropdown for the Assessment Interval
+        String[] intervals = {"Baseline", "Week 1", "Week 2", "Week 4", "Week 8"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, intervals);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinInterval.setAdapter(adapter);
+
+        spinInterval.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(android.widget.AdapterView<?> parent, View view, int position, long id) {
+                loadExistingVisitData(intervals[position]);
+            }
+            @Override
+            public void onNothingSelected(android.widget.AdapterView<?> parent) {}
+        });
+    }
+
+    private void loadPatientName(String patientId) {
+        if (patientId.isEmpty()) return;
+        FirebaseDatabase.getInstance().getReference("users").child(patientId)
+                .child("fullName").addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {
+                    @Override
+                    public void onDataChange(@androidx.annotation.NonNull com.google.firebase.database.DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            etPatientName.setText(snapshot.getValue(String.class));
+                        }
+                    }
+                    @Override
+                    public void onCancelled(@androidx.annotation.NonNull com.google.firebase.database.DatabaseError error) {}
+                });
+    }
+
+    private void loadExistingVisitData(String visit) {
+        String patientId = etPatientId.getText().toString().trim().toUpperCase();
+        if (patientId.isEmpty()) return;
+
+        FirebaseDatabase.getInstance().getReference("clinical_symptoms")
+                .child(patientId).child(visit).addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {
+                    @Override
+                    public void onDataChange(@androidx.annotation.NonNull com.google.firebase.database.DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            SymptomRecord record = snapshot.getValue(SymptomRecord.class);
+                            if (record != null) {
+                                etAssessmentDate.setText(record.assessmentDate);
+                                etAssessmentTime.setText(record.assessmentTime);
+                                setRadioGroupScore(rgCongestion, record.congestion);
+                                setRadioGroupScore(rgRhinorrhea, record.rhinorrhea);
+                                setRadioGroupScore(rgSneezing, record.sneezing);
+                                setRadioGroupScore(rgItching, record.itching);
+                                setRadioGroupScore(rgPostNasal, record.postNasalDrip);
+                                setRadioGroupScore(rgSmell, record.lossOfSmell);
+                                setRadioGroupScore(rgEye, record.eyeSymptoms);
+                                setRadioGroupScore(rgSleep, record.sleepDisturbance);
+                                Toast.makeText(SymptomScoreActivity.this, "Existing data loaded for " + visit, Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            // Clear fields for new entry
+                            etAssessmentDate.setText("");
+                            etAssessmentTime.setText("");
+                            rgCongestion.clearCheck();
+                            rgRhinorrhea.clearCheck();
+                            rgSneezing.clearCheck();
+                            rgItching.clearCheck();
+                            rgPostNasal.clearCheck();
+                            rgSmell.clearCheck();
+                            rgEye.clearCheck();
+                            rgSleep.clearCheck();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@androidx.annotation.NonNull com.google.firebase.database.DatabaseError error) {}
+                });
+    }
+
+    private void setRadioGroupScore(RadioGroup rg, int score) {
+        if (score >= 0 && score < rg.getChildCount()) {
+            ((android.widget.RadioButton) rg.getChildAt(score)).setChecked(true);
+        }
+    }
+
     private int getScoreFromRadioGroup(RadioGroup rg) {
         if (rg == null) return 0;
         int selectedId = rg.getCheckedRadioButtonId();
@@ -96,13 +188,12 @@ public class SymptomScoreActivity extends AppCompatActivity {
     }
 
     private void compileAndUploadScores() {
-        String trialId = etPatientId.getText().toString().trim();
-        String pName = etPatientName.getText().toString().trim();
+        String trialId = etPatientId.getText().toString().trim().toUpperCase();
         String aDate = etAssessmentDate.getText().toString().trim();
         String aTime = etAssessmentTime.getText().toString().trim();
 
-        if (trialId.isEmpty() || pName.isEmpty() || aDate.isEmpty()) {
-            Toast.makeText(this, "Please fill in Patient ID, Name and Date", Toast.LENGTH_SHORT).show();
+        if (trialId.isEmpty() || aDate.isEmpty()) {
+            Toast.makeText(this, "Please fill in Patient ID and Date", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -110,7 +201,6 @@ public class SymptomScoreActivity extends AppCompatActivity {
         String visit = spinInterval.getSelectedItem().toString();
 
         SymptomRecord record = new SymptomRecord(trialId, timestamp, visit);
-        record.patientName = pName;
         record.assessmentDate = aDate;
         record.assessmentTime = aTime;
 

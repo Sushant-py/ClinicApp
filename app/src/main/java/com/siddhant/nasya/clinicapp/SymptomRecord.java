@@ -1,8 +1,7 @@
 package com.siddhant.nasya.clinicapp;
 
 public class SymptomRecord {
-    public String trialId;
-    public String patientName;
+    public String patientId; // Renamed from trialId for clarity
     public String assessmentDate;
     public String assessmentTime;
     public String timestamp;
@@ -26,8 +25,8 @@ public class SymptomRecord {
 
     public SymptomRecord() {}
 
-    public SymptomRecord(String trialId, String timestamp, String visitType) {
-        this.trialId = trialId;
+    public SymptomRecord(String patientId, String timestamp, String visitType) {
+        this.patientId = patientId;
         this.timestamp = timestamp;
         this.visitType = visitType;
     }
